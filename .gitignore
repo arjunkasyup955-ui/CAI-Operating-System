@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Environment
+.env
+.env.*
+
+# Ollama
+.ollama/
+
+# Logs
+*.log
+
+# Database
+*.db
+
+# VS Code
+.vscode/
+
+# OS Files
+.DS_Store
+Thumbs.db
