@@ -1,0 +1,23 @@
+name: crawl4ai_agent
+responsibilities:
+  - Provide read-only web crawling/extraction connectivity - health check, single
+    and multi-URL crawling, markdown/structured/links/metadata extraction, with
+    per-URL caching - on behalf of the Manager/Claude Code Agent and research agents
+inputs:
+  - operation name + operation-specific arguments (url, urls, extraction_schema,
+    use_cache)
+outputs:
+  - Crawl4AIOperationResult (success, operation, pages, error)
+tools:
+  - crawl4ai_health_check
+  - crawl4ai_crawl_url
+  - crawl4ai_crawl_urls
+  - crawl4ai_extract_markdown
+  - crawl4ai_extract_structured
+  - crawl4ai_extract_links
+  - crawl4ai_extract_metadata
+permissions:
+  - internet_access
+supervisor: manager
+lifecycle: active
+version: "0.1.0"
