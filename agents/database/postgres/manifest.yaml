@@ -1,0 +1,29 @@
+name: postgres_agent
+responsibilities:
+  - Provide PostgreSQL connectivity - connection pooling, health check, database and
+    table creation, parameterized CRUD, and transactions with rollback - on behalf of
+    the Manager/Claude Code Agent
+  - Never bypasses the Tool Registry or Approval Framework; never string-interpolates
+    user-supplied values into SQL (always parameterized)
+inputs:
+  - operation name + operation-specific arguments (table_name, columns, where, values,
+    tx_id)
+outputs:
+  - PostgresQueryResult (success, operation, rows, row_count, error) or a health/
+    transaction status dict
+tools:
+  - postgres_health_check
+  - postgres_create_database
+  - postgres_create_table
+  - postgres_select
+  - postgres_insert
+  - postgres_update
+  - postgres_delete
+  - postgres_begin_transaction
+  - postgres_commit_transaction
+  - postgres_rollback_transaction
+permissions:
+  - internet_access
+supervisor: manager
+lifecycle: active
+version: "0.1.0"
