@@ -1,0 +1,37 @@
+name: ads_agent
+responsibilities:
+  - Provide ad platform connectivity (Google Ads, Meta Ads, LinkedIn Ads, or X
+    Ads, selected via config, not code) - health check, campaign lifecycle,
+    analytics, budget management, audience lookup, keyword suggestions, ad
+    previews, and ad group/ad creation - on behalf of the Manager/Claude Code
+    Agent and future Growth/Marketing agents
+  - Deleting a campaign always requires human approval, since it is a
+    destructive, hard-to-reverse action with real ad-spend consequences
+inputs:
+  - operation name + operation-specific arguments (campaign_id, ad_group_id, ad_id,
+    campaign_name, budget, objective, platform, query, max_results, seed_keyword,
+    ad_group_name, headline, body)
+outputs:
+  - AdsOperationResult (success, operation, campaign, campaigns, ad_group, ad,
+    analytics, audiences, keywords, preview, error)
+tools:
+  - ads_health_check
+  - ads_create_campaign
+  - ads_update_campaign
+  - ads_pause_campaign
+  - ads_resume_campaign
+  - ads_delete_campaign
+  - ads_get_campaign
+  - ads_list_campaigns
+  - ads_campaign_analytics
+  - ads_budget_update
+  - ads_audience_lookup
+  - ads_keyword_suggestions
+  - ads_ad_preview
+  - ads_create_ad_group
+  - ads_create_ad
+permissions:
+  - advertisement
+supervisor: manager
+lifecycle: active
+version: "0.1.0"
