@@ -1,0 +1,15 @@
+name: opportunity_detection_agent
+responsibilities:
+  - Analyze browser content, market intelligence, competitor intelligence, and trend
+    intelligence already gathered upstream to identify a structured business
+    opportunity - never fetches or searches anything itself
+inputs:
+  - VentureState (research_findings - browser_agent content, market_intelligence_agent
+    report, competitor_intelligence_agent report, trend_intelligence_agent report)
+outputs:
+  - VentureState (research_findings, history) - a structured opportunity report
+tools: []
+permissions: []
+supervisor: research_supervisor
+lifecycle: active
+version: "0.1.0"
