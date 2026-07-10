@@ -1,0 +1,28 @@
+name: n8n_agent
+responsibilities:
+  - Provide n8n workflow automation connectivity - health check, workflow lifecycle
+    (list/get/create/update/activate/deactivate/delete), execution, and execution
+    history - on behalf of the Manager/Claude Code Agent
+  - Deleting a workflow, and executing one (which can trigger arbitrary real-world
+    side effects depending on what the workflow does), always require human approval
+inputs:
+  - operation name + operation-specific arguments (workflow_id, workflow_name, nodes,
+    connections, input_data, limit)
+outputs:
+  - N8nOperationResult (success, operation, workflows, executions, workflow_id, error)
+tools:
+  - n8n_health_check
+  - n8n_list_workflows
+  - n8n_get_workflow
+  - n8n_create_workflow
+  - n8n_update_workflow
+  - n8n_activate_workflow
+  - n8n_deactivate_workflow
+  - n8n_delete_workflow
+  - n8n_execute_workflow
+  - n8n_workflow_executions
+permissions:
+  - internet_access
+supervisor: manager
+lifecycle: active
+version: "0.1.0"
