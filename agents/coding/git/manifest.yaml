@@ -1,0 +1,23 @@
+name: git_agent
+responsibilities:
+  - Perform safe, non-destructive git operations (status, add, commit, checkout,
+    branch, diff, log) on behalf of the Manager/Claude Code Agent
+  - Never executes reset --hard, clean -fd/-f/-d, or force push - refused before
+    subprocess ever runs
+inputs:
+  - operation name + operation-specific arguments (paths, message, ref, branch name)
+outputs:
+  - GitOperationResult (success, operation, output, error, exit_code)
+tools:
+  - git_status
+  - git_add
+  - git_commit
+  - git_checkout
+  - git_branch
+  - git_diff
+  - git_log
+permissions:
+  - git_ops
+supervisor: manager
+lifecycle: active
+version: "0.1.0"
