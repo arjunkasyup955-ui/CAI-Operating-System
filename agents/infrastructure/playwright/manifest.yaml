@@ -1,0 +1,31 @@
+name: playwright_agent
+responsibilities:
+  - Provide browser automation connectivity - health check, browser lifecycle
+    (launch/close), navigation, content extraction (HTML/text), screenshots, form
+    filling, element interaction, and arbitrary JavaScript execution - on behalf of
+    the Manager/Claude Code Agent
+  - Executing arbitrary JavaScript in a page context always requires human approval,
+    since it can trigger arbitrary side effects on whatever site is loaded
+inputs:
+  - operation name + operation-specific arguments (browser_id, url, script, fields,
+    selector, timeout_ms, headless, full_page)
+outputs:
+  - PlaywrightOperationResult (success, operation, browser_id, url, title, html,
+    text, screenshot_base64, js_result, error)
+tools:
+  - playwright_health_check
+  - playwright_launch_browser
+  - playwright_close_browser
+  - playwright_open_url
+  - playwright_screenshot
+  - playwright_extract_html
+  - playwright_extract_text
+  - playwright_execute_javascript
+  - playwright_fill_form
+  - playwright_click_element
+  - playwright_wait_for_selector
+permissions:
+  - internet_access
+supervisor: manager
+lifecycle: active
+version: "0.1.0"
