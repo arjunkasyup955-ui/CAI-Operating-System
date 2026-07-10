@@ -1,0 +1,24 @@
+name: voice_agent
+responsibilities:
+  - Provide speech-to-text and text-to-speech connectivity - health check, short
+    and full audio transcription, speech synthesis (simple and configurable), and
+    voice activity detection, with language selection and streaming support - on
+    behalf of the Manager/Claude Code Agent and any future voice-facing agents
+inputs:
+  - operation name + operation-specific arguments (audio_data, text, voice,
+    language, stream, include_segments, audio_format, speed)
+outputs:
+  - VoiceOperationResult (success, operation, text, segments, audio_base64,
+    audio_format, language, has_speech, chunks, streamed, error)
+tools:
+  - voice_health_check
+  - voice_speech_to_text
+  - voice_transcribe_audio
+  - voice_text_to_speech
+  - voice_synthesize_audio
+  - voice_detect_activity
+permissions:
+  - internet_access
+supervisor: manager
+lifecycle: active
+version: "0.1.0"
