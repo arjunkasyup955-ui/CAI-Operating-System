@@ -1,0 +1,20 @@
+name: debug_retry_agent
+responsibilities:
+  - Analyze failed executions from other agents (Git, File Editor, Terminal, Build
+    Runner, Claude Code), classify the failure as transient/permanent/unknown,
+    produce structured diagnostics and a recommended fix
+  - Automatically retry transient failures with exponential backoff, bounded by a
+    retry budget - never retries a permanent failure at all
+inputs:
+  - operation name, the failed operation's error text, and a retry_fn callable that
+    re-invokes the original operation
+outputs:
+  - diagnosis (failure_type, category, diagnosis, recommended_fix, confidence) plus
+    retry outcome (retried, retry_attempts, retry_budget_exhausted)
+tools:
+  - diagnose_failure
+permissions:
+  - shell_exec
+supervisor: manager
+lifecycle: active
+version: "0.1.0"
