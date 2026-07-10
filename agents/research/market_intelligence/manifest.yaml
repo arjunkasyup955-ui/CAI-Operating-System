@@ -1,0 +1,13 @@
+name: market_intelligence_agent
+responsibilities:
+  - Analyze content already gathered by Search Agent and Browser Agent to produce a
+    structured Market Intelligence report - never fetches or searches anything itself
+inputs:
+  - VentureState (research_findings - browser_agent content, search_agent sources)
+outputs:
+  - VentureState (research_findings, history) - a structured market intelligence report
+tools: []
+permissions: []
+supervisor: research_supervisor
+lifecycle: active
+version: "0.1.0"

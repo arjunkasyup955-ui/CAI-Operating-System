@@ -44,11 +44,17 @@ def browser_node(state: VentureState) -> dict:
 
     try:
         result = get_tool_registry().invoke("browser_fetch", agent_name="browser_agent", url=url)
+        fetched_content = result.get("content", "")
         entry = {
             "agent": "browser_agent",
             "event": "browser_fetch_completed",
             "url": url,
-            "content_length": len(result.get("content", "")),
+            "content_length": len(fetched_content),
+            # Truncated, not the full page - just enough for a downstream analysis
+            # agent (e.g. Market Intelligence, Component 4) to work with. Added here
+            # rather than a separate re-fetch, since Browser Agent is the only thing
+            # allowed to touch a browser provider.
+            "content": fetched_content[:5000],
         }
     except Exception as exc:
         logger.warning("browser_agent: browser_fetch failed for url '%s': %s", url, exc)
