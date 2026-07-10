@@ -1,0 +1,27 @@
+name: langsmith_agent
+responsibilities:
+  - Provide LangSmith tracing/observability connectivity - health check, trace
+    lifecycle (create/update/end), child run creation, metrics logging, feedback
+    logging, and dataset upload - on behalf of the Manager/Claude Code Agent and
+    any agent wanting to record its own execution telemetry
+inputs:
+  - operation name + operation-specific arguments (trace_name, trace_id, run_name,
+    run_id, run_type, inputs, outputs, metadata, metrics, feedback_key, score,
+    comment, dataset_name, examples, error)
+outputs:
+  - LangSmithOperationResult (success, operation, trace_id, run_id, dataset_id,
+    feedback_id, error)
+tools:
+  - langsmith_health_check
+  - langsmith_create_trace
+  - langsmith_update_trace
+  - langsmith_end_trace
+  - langsmith_create_run
+  - langsmith_log_metrics
+  - langsmith_log_feedback
+  - langsmith_dataset_upload
+permissions:
+  - internet_access
+supervisor: manager
+lifecycle: active
+version: "0.1.0"
