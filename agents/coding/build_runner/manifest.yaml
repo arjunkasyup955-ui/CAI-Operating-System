@@ -1,0 +1,22 @@
+name: build_runner_agent
+responsibilities:
+  - Run common project build workflows (Python install/test/build, Node.js
+    install/test/build, generic build commands) on behalf of the Manager/Claude Code
+    Agent
+  - Dependency installation, publishing, deployment, package upload, and system
+    modification always require human approval; never runs a banned destructive
+    command
+inputs:
+  - build_type (python/node/generic), action, extra_args or command
+outputs:
+  - BuildResult (success, build_type, command, stdout, stderr, exit_code,
+    duration_seconds, status)
+tools:
+  - build_python
+  - build_node
+  - build_generic
+permissions:
+  - shell_exec
+supervisor: manager
+lifecycle: active
+version: "0.1.0"
