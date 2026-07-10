@@ -1,0 +1,24 @@
+name: file_editor_agent
+responsibilities:
+  - Perform safe file operations (read, write, append, replace text, create file,
+    create directory) on behalf of the Manager/Claude Code Agent
+  - Never deletes files or directories (no such capability exists), never touches
+    .git/.venv/system folders or the frozen core/ kernel, never overwrites protected
+    files (.env), never follows path traversal, never operates outside the repository
+    root
+inputs:
+  - operation name + operation-specific arguments (path, content, old_text, new_text)
+outputs:
+  - FileOperationResult (success, operation, path, content, bytes_written, error)
+tools:
+  - read_file
+  - write_file
+  - append_file
+  - replace_text
+  - create_file
+  - create_directory
+permissions:
+  - file_access
+supervisor: manager
+lifecycle: active
+version: "0.1.0"
