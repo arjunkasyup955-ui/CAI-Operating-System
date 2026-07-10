@@ -1,0 +1,19 @@
+# capability -> ordered fallback chain of {provider, model}.
+# Adding a provider = one adapter class in providers.py + an entry here. No agent code changes.
+default:
+  - provider: openai
+    model: gpt-4o-mini
+  - provider: ollama
+    model: qwen3:8b
+
+high-reasoning:
+  - provider: openai
+    model: gpt-4o
+  - provider: ollama
+    model: qwen3:8b
+
+cheap-fast:
+  - provider: ollama
+    model: qwen3:8b
+  - provider: openai
+    model: gpt-4o-mini

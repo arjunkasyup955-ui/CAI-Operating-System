@@ -1,0 +1,14 @@
+name: manager
+responsibilities:
+  - Own the venture's lifecycle phase and route state to the correct domain supervisor
+  - Own the top-level approval gate proven in Phase 0
+inputs:
+  - VentureState
+outputs:
+  - VentureState (phase, history, pending_approval)
+tools: []
+permissions:
+  - internet_access
+supervisor: null
+lifecycle: active
+version: "0.1.0"
