@@ -1,0 +1,16 @@
+name: competitor_intelligence_agent
+responsibilities:
+  - Analyze market intelligence and browser content already gathered upstream to
+    produce a structured competitor analysis - never fetches or searches anything
+    itself
+inputs:
+  - VentureState (research_findings - browser_agent content, market_intelligence_agent
+    report)
+outputs:
+  - VentureState (research_findings, history) - a structured competitor intelligence
+    report
+tools: []
+permissions: []
+supervisor: research_supervisor
+lifecycle: active
+version: "0.1.0"
