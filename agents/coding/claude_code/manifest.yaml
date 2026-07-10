@@ -1,0 +1,15 @@
+name: claude_code_agent
+responsibilities:
+  - Delegate software engineering task planning/reasoning to Claude Code (via an
+    injectable ClaudeCodeProvider) on behalf of the Manager
+  - Does NOT execute git, terminal commands, file edits, or MCP tools yet - those
+    arrive as their own separately reviewed components
+inputs:
+  - ClaudeCodeTaskRequest (task_description, context)
+outputs:
+  - ClaudeCodeTaskResult (summary, plan, output, files_changed, commands_run)
+tools: []
+permissions: []
+supervisor: manager
+lifecycle: active
+version: "0.1.0"
