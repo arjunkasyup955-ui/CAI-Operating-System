@@ -1,0 +1,18 @@
+name: terminal_agent
+responsibilities:
+  - Execute safe terminal commands (as an argv list, never a shell string) on behalf
+    of the Manager/Claude Code Agent
+  - Never runs a banned destructive command (rm -rf, format, shutdown, etc.); package
+    installs, system-modifying commands, and inline-code-execution flags always
+    require human approval
+inputs:
+  - command (list of argv tokens) + optional timeout_seconds
+outputs:
+  - TerminalExecutionResult (success, command, stdout, stderr, exit_code, duration_seconds)
+tools:
+  - terminal_execute
+permissions:
+  - shell_exec
+supervisor: manager
+lifecycle: active
+version: "0.1.0"
