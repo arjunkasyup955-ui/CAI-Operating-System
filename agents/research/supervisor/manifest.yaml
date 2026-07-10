@@ -1,0 +1,14 @@
+name: research_supervisor
+responsibilities:
+  - Coordinate research workers (search, browser, market intelligence, competitor
+    analysis, trend detection, opportunity detection, idea validation) to turn a
+    venture idea into validated research findings
+inputs:
+  - VentureState (idea, venture_id, phase)
+outputs:
+  - VentureState (research_findings, history)
+tools: []
+permissions: []
+supervisor: manager
+lifecycle: active
+version: "0.1.0"
