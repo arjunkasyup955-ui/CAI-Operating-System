@@ -1,0 +1,34 @@
+name: crm_agent
+responsibilities:
+  - Provide CRM connectivity (HubSpot, Salesforce, Zoho CRM, or Pipedrive,
+    selected via config, not code) - health check, lead/contact/company/deal
+    lifecycle, lead search, note-taking, and pipeline listing - on behalf of the
+    Manager/Claude Code Agent and future Revenue/Sales agents
+  - Deleting a lead always requires human approval, since it is a destructive,
+    hard-to-reverse action against real business data
+inputs:
+  - operation name + operation-specific arguments (lead_id, contact_id, company_id,
+    deal_id, record_id, first_name, last_name, email, company, status, query,
+    max_results, company_name, domain, deal_name, amount, stage, pipeline_id, body)
+outputs:
+  - CRMOperationResult (success, operation, lead, leads, contact, company, deal,
+    note, pipelines, error)
+tools:
+  - crm_health_check
+  - crm_create_lead
+  - crm_update_lead
+  - crm_delete_lead
+  - crm_get_lead
+  - crm_search_leads
+  - crm_create_contact
+  - crm_update_contact
+  - crm_create_company
+  - crm_create_deal
+  - crm_update_deal
+  - crm_add_note
+  - crm_list_pipelines
+permissions:
+  - crm
+supervisor: manager
+lifecycle: active
+version: "0.1.0"
