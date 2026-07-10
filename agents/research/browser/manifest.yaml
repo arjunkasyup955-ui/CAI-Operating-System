@@ -1,0 +1,15 @@
+name: browser_agent
+responsibilities:
+  - Fetch and extract content from a URL surfaced by prior research (e.g. a search
+    result) via the browser_fetch tool
+inputs:
+  - VentureState (research_findings - looks for a prior search_agent result URL)
+outputs:
+  - VentureState (research_findings, history)
+tools:
+  - browser_fetch
+permissions:
+  - internet_access
+supervisor: research_supervisor
+lifecycle: active
+version: "0.1.0"

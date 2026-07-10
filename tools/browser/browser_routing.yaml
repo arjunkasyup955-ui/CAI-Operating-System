@@ -1,0 +1,7 @@
+# ordered fallback chain of browser/fetch providers. Adding a provider = one adapter
+# class in browser_providers.py + one entry in _PROVIDER_REGISTRY (browser_router.py) +
+# an entry here. No agent code changes.
+chain:
+  - playwright
+  - crawl4ai
+  - firecrawl
