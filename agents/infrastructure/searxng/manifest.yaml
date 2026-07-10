@@ -1,0 +1,22 @@
+name: searxng_agent
+responsibilities:
+  - Provide read-only metasearch connectivity via SearXNG - health check, general
+    web search, news search, and image search, with category/language/safe_search/
+    result-limit control - on behalf of the Manager/Claude Code Agent and research
+    agents
+inputs:
+  - operation name + operation-specific arguments (query, category, language,
+    safe_search, max_results)
+outputs:
+  - SearXNGOperationResult (success, operation, query, results, number_of_results,
+    error)
+tools:
+  - searxng_health_check
+  - searxng_web_search
+  - searxng_news_search
+  - searxng_image_search
+permissions:
+  - internet_access
+supervisor: manager
+lifecycle: active
+version: "0.1.0"
