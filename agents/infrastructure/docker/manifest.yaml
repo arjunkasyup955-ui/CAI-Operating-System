@@ -1,0 +1,31 @@
+name: docker_agent
+responsibilities:
+  - Provide Docker container/image lifecycle management - health check, listing,
+    pulling images, creating/starting/stopping/restarting/removing containers, logs,
+    and exec - on behalf of the Manager/Claude Code Agent
+  - All destructive operations (remove container, force stop, exec into a container)
+    always require human approval
+inputs:
+  - operation name + operation-specific arguments (image_ref, container_id,
+    container_name, command, force)
+outputs:
+  - DockerOperationResult (success, operation, output, error, containers, images,
+    container_id)
+tools:
+  - docker_health_check
+  - docker_list_containers
+  - docker_list_images
+  - docker_pull_image
+  - docker_create_container
+  - docker_start_container
+  - docker_stop_container
+  - docker_restart_container
+  - docker_remove_container
+  - docker_container_logs
+  - docker_exec_command
+permissions:
+  - deployment
+  - shell_exec
+supervisor: manager
+lifecycle: active
+version: "0.1.0"
