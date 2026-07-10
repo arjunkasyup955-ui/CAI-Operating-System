@@ -1,0 +1,26 @@
+name: chroma_agent
+responsibilities:
+  - Provide Chroma vector database connectivity - collection lifecycle, document
+    CRUD, and metadata-filtered similarity search - on behalf of the Manager/Claude
+    Code Agent
+  - Reuses the Memory Gateway's existing embedding call (core/memory_gateway/
+    vector_store.py) rather than duplicating vector-store logic already in the kernel
+inputs:
+  - operation name + operation-specific arguments (collection, documents, ids, query,
+    top_k, where)
+outputs:
+  - ChromaOperationResult (success, operation, documents, count, error)
+tools:
+  - chroma_health_check
+  - chroma_create_collection
+  - chroma_delete_collection
+  - chroma_list_collections
+  - chroma_add_documents
+  - chroma_update_documents
+  - chroma_delete_documents
+  - chroma_similarity_search
+permissions:
+  - internet_access
+supervisor: manager
+lifecycle: active
+version: "0.1.0"
