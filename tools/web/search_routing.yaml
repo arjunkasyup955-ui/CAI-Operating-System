@@ -1,0 +1,7 @@
+# ordered fallback chain of search providers. Adding a provider = one adapter class in
+# search_providers.py + one entry in _PROVIDER_REGISTRY (search_router.py) + an entry
+# here. No agent code changes.
+chain:
+  - searxng
+  - tavily
+  - brave

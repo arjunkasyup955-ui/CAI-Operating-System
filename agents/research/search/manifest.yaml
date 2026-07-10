@@ -1,0 +1,14 @@
+name: search_agent
+responsibilities:
+  - Perform web searches for a venture idea via the web_search tool
+inputs:
+  - VentureState (idea)
+outputs:
+  - VentureState (research_findings, history)
+tools:
+  - web_search
+permissions:
+  - internet_access
+supervisor: research_supervisor
+lifecycle: active
+version: "0.1.0"
