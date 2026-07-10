@@ -1,0 +1,15 @@
+name: trend_intelligence_agent
+responsibilities:
+  - Analyze browser content, market intelligence, and competitor intelligence already
+    gathered upstream to produce a structured trend analysis - never fetches or
+    searches anything itself
+inputs:
+  - VentureState (research_findings - browser_agent content, market_intelligence_agent
+    report, competitor_intelligence_agent report)
+outputs:
+  - VentureState (research_findings, history) - a structured trend intelligence report
+tools: []
+permissions: []
+supervisor: research_supervisor
+lifecycle: active
+version: "0.1.0"
