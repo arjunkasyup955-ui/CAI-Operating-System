@@ -1,0 +1,21 @@
+name: ollama_ops_agent
+responsibilities:
+  - Provide operational capabilities for the local Ollama LLM service - health check,
+    installed-model discovery, and streaming chat
+  - Delegate ordinary (non-streaming) chat completion to the existing Model Router -
+    never bypasses it, never duplicates its chat/fallback logic
+inputs:
+  - health check / model listing take no arguments; chat/stream take messages + model
+    or capability
+outputs:
+  - OllamaHealthStatus / list of OllamaModelInfo / chat response / streamed chunks
+tools:
+  - ollama_health_check
+  - ollama_list_models
+  - ollama_chat
+  - ollama_stream_chat
+permissions:
+  - internet_access
+supervisor: manager
+lifecycle: active
+version: "0.1.0"
