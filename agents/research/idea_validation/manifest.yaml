@@ -1,0 +1,17 @@
+name: idea_validation_agent
+responsibilities:
+  - Analyze browser content, market intelligence, competitor intelligence, trend
+    intelligence, and the detected opportunity already gathered upstream to produce a
+    structured idea validation verdict - never fetches, searches, or performs its own
+    market analysis
+inputs:
+  - VentureState (research_findings - browser_agent content, market_intelligence_agent
+    report, competitor_intelligence_agent report, trend_intelligence_agent report,
+    opportunity_detection_agent report)
+outputs:
+  - VentureState (research_findings, history) - a structured idea validation report
+tools: []
+permissions: []
+supervisor: research_supervisor
+lifecycle: active
+version: "0.1.0"
