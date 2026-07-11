@@ -1,0 +1,24 @@
+name: deployment_pipeline
+responsibilities:
+  - Consume the completed AI Builder Pipeline's Build Report and, only if the
+    build was successful, orchestrate the existing Phase 3 Infrastructure
+    Agents (Docker, PostgreSQL, Chroma, Ollama, n8n) to prepare/verify the
+    venture's deployment environment - never duplicating any of their
+    implementation, only calling them
+  - Runs every infrastructure stage regardless of a prior stage's outcome - one
+    unreachable backend degrades only that stage's result in the Deployment
+    Report, never aborts the pipeline
+  - Skips deployment entirely (a well-formed, empty Deployment Report
+    explaining why) when the Build Report was not successful
+inputs:
+  - idea (str)
+  - venture_id (str)
+  - optional research_depth ("standard" | "deep")
+outputs:
+  - Deployment Report (idea, status, build_validated, stages,
+    ready_stage_count, total_stage_count, summary, error)
+tools: []
+permissions: []
+supervisor: null
+lifecycle: active
+version: "0.1.0"
