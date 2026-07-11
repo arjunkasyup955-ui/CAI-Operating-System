@@ -1,0 +1,27 @@
+name: founder_dashboard
+responsibilities:
+  - Consume the outputs of all 7 prior Phase 4 components (Founder
+    Orchestrator, Research Pipeline, Decision Engine, MVP Planner, AI Builder,
+    Deployment Pipeline, Growth Pipeline) plus the existing Phase 2 Git Agent's
+    status, and aggregate them into a single FounderDashboard - never
+    duplicating any of their implementation, only calling them
+  - Runs every component call regardless of a prior one's outcome - one
+    unavailable/unsuccessful component degrades only that section of the
+    dashboard, never aborts the rest
+  - Deterministically derives an overall health rating, alerts, risks, and
+    recommended next actions from the 7 components' own already-computed
+    results - no AI/LLM call, no external API call of its own
+inputs:
+  - idea (str)
+  - venture_id (str)
+  - optional research_depth ("standard" | "deep")
+outputs:
+  - FounderDashboard (idea, venture_id, status, overall_health,
+    venture_summary, research_summary, market_analysis, competitor_summary,
+    decision_scores, mvp_plan, build_status, deployment_status, growth_status,
+    git_status, alerts, risks, recommended_next_actions, summary, error)
+tools: []
+permissions: []
+supervisor: null
+lifecycle: active
+version: "0.1.0"
