@@ -1,0 +1,24 @@
+name: mvp_planner
+responsibilities:
+  - Consume the completed Founder Decision Engine's FounderDecisionReport and
+    deterministically produce an MVPPlan - PRD, MVP scope, feature list,
+    recommended tech stack, database outline, API outline, folder structure,
+    development timeline, milestones, and risks & dependencies
+  - Never calls an external API, Tool Registry tool, or LLM directly - the only
+    thing this agent reaches outside itself for is the already-completed
+    Founder Decision Engine (Phase 4 Component 3)
+  - Skips full plan generation (a well-formed, empty plan explaining why) when
+    the Decision Engine recommends PIVOT or DROP, or did not complete
+inputs:
+  - idea (str)
+  - venture_id (str)
+  - optional research_depth ("standard" | "deep")
+outputs:
+  - MVPPlan (idea, prd, mvp_scope, feature_list, tech_stack, database_outline,
+    api_outline, folder_structure, development_timeline, milestones,
+    risks_and_dependencies, status)
+tools: []
+permissions: []
+supervisor: null
+lifecycle: active
+version: "0.1.0"
