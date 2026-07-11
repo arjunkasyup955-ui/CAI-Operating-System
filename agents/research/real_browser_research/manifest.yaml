@@ -1,0 +1,18 @@
+name: real_browser_research
+responsibilities:
+  - Multi-source web search, competitor discovery, and per-competitor page
+    enrichment (pricing/funding/positioning extraction, source confidence
+    scoring, citation tracking) - a richer, production-grade upgrade of the
+    Research Pipeline's single-URL browser stage
+inputs:
+  - VentureState (idea, venture_id)
+outputs:
+  - VentureState (research_findings, history)
+tools:
+  - browser_fetch
+  - web_search
+permissions:
+  - internet_access
+supervisor: research_supervisor
+lifecycle: active
+version: "0.1.0"
