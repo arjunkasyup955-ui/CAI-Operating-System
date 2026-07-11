@@ -1,0 +1,25 @@
+name: ai_builder
+responsibilities:
+  - Consume the completed MVP Planner's MVPPlan and orchestrate the existing
+    Phase 2 Coding Engine agents (Claude Code, Git, File Editor, Terminal,
+    Build Runner, Debug & Retry, Loop Controller) to scaffold, code, build, and
+    test the project - never duplicating any of their logic, only calling them
+  - Generate a deterministic execution plan (a list of Loop Controller steps)
+    from the MVP Plan, then drive the Loop Controller Agent (via a custom
+    LoopProvider that dispatches each step type to the right Coding Engine
+    agent) to completion, automatically invoking Debug & Retry when a build
+    step fails, and produce a structured Build Report
+  - Skips the build entirely (a well-formed, empty Build Report explaining why)
+    when the MVP Planner did not produce a buildable plan
+inputs:
+  - idea (str)
+  - venture_id (str)
+  - optional research_depth ("standard" | "deep")
+outputs:
+  - Build Report (idea, status, loop_status, steps_total, steps_completed,
+    iteration_count, debug_retry_invocations, step_progress, summary, error)
+tools: []
+permissions: []
+supervisor: null
+lifecycle: active
+version: "0.1.0"
