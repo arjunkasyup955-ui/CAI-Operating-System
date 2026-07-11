@@ -1,0 +1,19 @@
+name: ai_builder_reliability
+responsibilities:
+  - Production-grade reliability wrapper around the AI Builder Pipeline
+    (timeout recovery, checkpoint save/resume, exponential-backoff retry,
+    failure classification, pause/resume/cancellation, build health
+    monitoring) - delegates all real step execution to the existing,
+    unmodified Phase 2 Coding Engine agents via the AI Builder Pipeline's own
+    documented set_step_executor_factory extension point
+inputs:
+  - idea, venture_id, research_depth (same as run_ai_builder)
+outputs:
+  - a BuildExecutionReport dict (superset of the AI Builder Pipeline's own
+    BuildReport, plus build_run_id/outer_attempts/failure_category/
+    build_health)
+tools: []
+permissions: []
+supervisor: null
+lifecycle: active
+version: "0.1.0"
