@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AFOS Approvals &amp; Collaboration</title>
+<link rel="stylesheet" href="/approvals.css">
+</head>
+<body>
+<header class="app-header">
+  <div class="header-left">
+    <span class="logo">⬢</span>
+    <span class="app-title">AFOS Approvals &amp; Collaboration</span>
+  </div>
+  <div class="header-center">
+    <label for="project-selector" class="visually-hidden">Project</label>
+    <select id="project-selector" aria-label="Select project">
+      <option value="">All Projects</option>
+    </select>
+    <input id="global-search" type="search" placeholder="Search approvals, comments, tasks...">
+  </div>
+  <div class="header-right">
+    <span id="notif-badge" class="badge-count">0</span>
+    <button id="refresh-btn" class="icon-btn" title="Refresh">⟳</button>
+  </div>
+</header>
+
+<div class="app-layout">
+  <nav class="sidebar">
+    <a href="#queue" class="nav-link active" data-section="queue">▣ Approval Queue</a>
+    <a href="#pending" class="nav-link" data-section="pending">▤ Pending Reviews</a>
+    <a href="#decisions" class="nav-link" data-section="decisions">▥ Recent Decisions</a>
+    <a href="#reviewers" class="nav-link" data-section="reviewers">▦ Reviewer Activity</a>
+    <a href="#timeline" class="nav-link" data-section="timeline">▧ Approval Timeline</a>
+    <a href="#feed" class="nav-link" data-section="feed">▨ Collaboration Feed</a>
+    <a href="#comments" class="nav-link" data-section="comments">▩ Comment History</a>
+    <a href="#tasks" class="nav-link" data-section="tasks">⚑ Task Assignments</a>
+    <a href="#team" class="nav-link" data-section="team">☺ Team</a>
+  </nav>
+
+  <main class="content">
+
+    <section id="queue" class="panel">
+      <div class="card" data-card="queue">
+        <div class="card-header"><h2>Approval Queue</h2><button class="collapse-toggle" aria-label="Collapse">▾</button></div>
+        <div class="card-body">
+          <div class="filter-row">
+            <input id="queue-search" type="search" placeholder="Search approvals...">
+            <select id="queue-status-filter">
+              <option value="">All statuses</option>
+              <option value="pending">Pending</option>
+              <option value="approved">Approved</option>
+              <option value="rejected">Rejected</option>
+              <option value="changes_requested">Changes Requested</option>
+              <option value="escalated">Escalated</option>
+              <option value="expired">Expired</option>
+              <option value="auto_approved">Auto Approved</option>
+            </select>
+            <select id="queue-stage-filter">
+              <option value="">All stages</option>
+              <option value="research">Research</option>
+              <option value="decision">Decision</option>
+              <option value="mvp">MVP</option>
+              <option value="ai_builder">AI Builder</option>
+              <option value="deployment">Deployment</option>
+              <option value="growth">Growth</option>
+            </select>
+          </div>
+          <div id="queue-table-wrap"><div class="loading-state">Loading approvals...</div></div>
+          <div id="queue-pagination" class="pagination"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="pending" class="panel">
+      <div class="card" data-card="pending">
+        <div class="card-header"><h2>Pending Reviews</h2><button class="collapse-toggle" aria-label="Collapse">▾</button></div>
+        <div class="card-body"><div id="pending-table-wrap"><div class="loading-state">Loading pending reviews...</div></div></div>
+      </div>
+    </section>
+
+    <section id="decisions" class="panel">
+      <div class="card" data-card="decisions">
+        <div class="card-header"><h2>Recent Decisions</h2><button class="collapse-toggle" aria-label="Collapse">▾</button></div>
+        <div class="card-body"><div id="decisions-table-wrap"><div class="loading-state">Loading recent decisions...</div></div></div>
+      </div>
+    </section>
+
+    <section id="reviewers" class="panel">
+      <div class="card" data-card="reviewers">
+        <div class="card-header"><h2>Reviewer Activity</h2><button class="collapse-toggle" aria-label="Collapse">▾</button></div>
+        <div class="card-body"><div id="reviewers-table-wrap"><div class="loading-state">Loading reviewer activity...</div></div></div>
+      </div>
+    </section>
+
+    <section id="timeline" class="panel">
+      <div class="card" data-card="timeline">
+        <div class="card-header"><h2>Approval Timeline</h2><button class="collapse-toggle" aria-label="Collapse">▾</button></div>
+        <div class="card-body"><div id="timeline-list-wrap"><div class="loading-state">Loading timeline...</div></div></div>
+      </div>
+    </section>
+
+    <section id="feed" class="panel">
+      <div class="card" data-card="feed">
+        <div class="card-header"><h2>Collaboration Feed</h2><button class="collapse-toggle" aria-label="Collapse">▾</button></div>
+        <div class="card-body"><div id="feed-list-wrap"><div class="loading-state">Loading activity feed...</div></div></div>
+      </div>
+    </section>
+
+    <section id="comments" class="panel">
+      <div class="card" data-card="comments">
+        <div class="card-header"><h2>Comment History</h2><button class="collapse-toggle" aria-label="Collapse">▾</button></div>
+        <div class="card-body">
+          <input id="comments-search" type="search" placeholder="Search comments...">
+          <div id="comments-list-wrap"><div class="loading-state">Loading comments...</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="tasks" class="panel">
+      <div class="card" data-card="tasks">
+        <div class="card-header"><h2>Task Assignments</h2><button class="collapse-toggle" aria-label="Collapse">▾</button></div>
+        <div class="card-body">
+          <div class="filter-row">
+            <select id="tasks-status-filter">
+              <option value="">All statuses</option>
+              <option value="open">Open</option>
+              <option value="in_progress">In Progress</option>
+              <option value="completed">Completed</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+          </div>
+          <div id="tasks-table-wrap"><div class="loading-state">Loading tasks...</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="team" class="panel">
+      <div class="card" data-card="team">
+        <div class="card-header"><h2>Team</h2><button class="collapse-toggle" aria-label="Collapse">▾</button></div>
+        <div class="card-body"><div id="team-table-wrap"><div class="loading-state">Loading team...</div></div></div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<div id="notifications" class="notifications" aria-live="polite"></div>
+<div id="loading-overlay" class="loading-overlay hidden"><div class="spinner"></div></div>
+
+<script src="/approvals.js"></script>
+</body>
+</html>

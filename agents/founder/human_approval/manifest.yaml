@@ -1,0 +1,19 @@
+name: human_approval
+responsibilities:
+  - Human-facing review/approval gate for each of the 6 founder pipeline
+    stages (Research, Decision, MVP, AI Builder, Deployment, Growth) -
+    approval queue, approve/reject/request-changes decisions with a full
+    audit trail, configurable per-stage approval policy (auto/manual/
+    multi-step/role-based), timeout and expiration, and escalation
+  - Distinct from core.approval (Phase 0's per-tool-call risk gate) - this
+    reviews a completed STAGE OUTPUT before the founder journey proceeds to
+    the next stage, not an individual tool invocation
+inputs:
+  - venture_id, stage, payload (the stage's own output/report dict)
+outputs:
+  - ApprovalRequest records (status, decision_history, review timing)
+tools: []
+permissions: []
+supervisor: null
+lifecycle: active
+version: "0.1.0"
