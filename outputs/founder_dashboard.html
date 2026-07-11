@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>AFOS Founder Dashboard</title>
+<style>
+  body { font-family: -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; background: #0d1117; color: #e6edf3; }
+  header { padding: 24px 32px; background: linear-gradient(135deg, #1f6feb, #388bfd); }
+  header h1 { margin: 0; font-size: 28px; }
+  header .tagline { opacity: 0.9; margin-top: 4px; }
+  main { padding: 24px 32px; max-width: 1100px; margin: 0 auto; }
+  section { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 18px 22px; margin-bottom: 20px; }
+  h2 { margin-top: 0; font-size: 18px; border-bottom: 1px solid #30363d; padding-bottom: 8px; }
+  table.kv { width: 100%; border-collapse: collapse; }
+  table.kv th { text-align: left; color: #8b949e; width: 220px; padding: 4px 8px 4px 0; vertical-align: top; }
+  table.kv td { padding: 4px 0; }
+  table.timeline { width: 100%; border-collapse: collapse; }
+  table.timeline th, table.timeline td { text-align: left; padding: 6px 10px; border-bottom: 1px solid #30363d; }
+  ul { margin: 4px 0; padding-left: 20px; }
+  .muted { color: #8b949e; }
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; color: white; font-weight: 600; font-size: 13px; }
+  .idea-box { font-size: 16px; font-style: italic; color: #c9d1d9; }
+  .score-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
+  .score-card { background: #0d1117; border: 1px solid #30363d; border-radius: 6px; padding: 10px 14px; }
+  .score-card .label { color: #8b949e; font-size: 12px; }
+  .score-card .value { font-size: 22px; font-weight: 700; }
+  footer { text-align: center; color: #6e7781; padding: 20px; font-size: 12px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>🚀 AFOS &mdash; AI Founder Operating System</h1>
+  <div class="tagline">Founder Dashboard &mdash; Idea to Launch, End to End</div>
+</header>
+<main>
+
+<section>
+  <h2>Idea</h2>
+  <p class="idea-box">&ldquo;Build an AI Voice Agent platform for Indian SMBs that can answer phone calls, qualify leads, book appointments, integrate with CRM, and automate customer support.&rdquo;</p>
+  <table class="kv">
+    <tr><th>Venture ID</th><td>demo-ai-voice-agent</td></tr>
+    <tr><th>Overall Health</th><td><span class='badge' style='background:#9a6700'>DEGRADED</span></td></tr>
+    <tr><th>Dashboard Status</th><td>completed</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>Research Summary</h2>
+  <table class='kv'><tr><th>status</th><td>no_data</td></tr><tr><th>confidence_score</th><td>0.0</td></tr><tr><th>sources_count</th><td>0</td></tr><tr><th>research_depth</th><td>standard</td></tr></table>
+</section>
+
+<section>
+  <h2>Market Analysis</h2>
+  <table class='kv'><tr><th>agent</th><td>market_intelligence_agent</td></tr><tr><th>event</th><td>market_analysis_skipped</td></tr><tr><th>reason</th><td>no usable browser content available</td></tr></table>
+</section>
+
+<section>
+  <h2>Competitors</h2>
+  <table class='kv'><tr><th>agent</th><td>competitor_intelligence_agent</td></tr><tr><th>event</th><td>competitor_analysis_skipped</td></tr><tr><th>reason</th><td>no market intelligence or browser content available</td></tr></table>
+</section>
+
+<section>
+  <h2>Decision Scores</h2>
+  <div class="score-grid">
+    <div class="score-card"><div class="label">Opportunity Score</div><div class="value">5.0</div></div>
+    <div class="score-card"><div class="label">Risk Score</div><div class="value">9.0</div></div>
+    <div class="score-card"><div class="label">Overall Score</div><div class="value">6.02</div></div>
+    <div class="score-card"><div class="label">Recommendation</div><div class="value">VALIDATE FIRST</div></div>
+  </div>
+  <br/>
+  <table class='kv'><tr><th>opportunity_score</th><td>5.0</td></tr><tr><th>competition_score</th><td>8.0</td></tr><tr><th>risk_score</th><td>9.0</td></tr><tr><th>market_size_score</th><td>5.0</td></tr><tr><th>build_difficulty</th><td>5.0</td></tr><tr><th>execution_complexity</th><td>5.0</td></tr><tr><th>revenue_potential</th><td>5.0</td></tr><tr><th>market_timing</th><td>5.0</td></tr><tr><th>ai_advantage</th><td>8.6</td></tr><tr><th>confidence_score</th><td>0.0</td></tr><tr><th>overall_score</th><td>6.02</td></tr><tr><th>recommendation</th><td>VALIDATE FIRST</td></tr></table>
+</section>
+
+<section>
+  <h2>MVP Plan</h2>
+  <table class='kv'><tr><th>status</th><td>completed</td></tr><tr><th>feature_count</th><td>6</td></tr><tr><th>tech_stack</th><td>[{&#x27;layer&#x27;: &#x27;frontend&#x27;, &#x27;technology&#x27;: &#x27;React + TypeScript (Next.js)&#x27;, &#x27;rationale&#x27;: &#x27;Fast to build, large ecosystem, easy hiring&#x27;}, {&#x27;layer&#x27;: &#x27;backend&#x27;, &#x27;technology&#x27;: &#x27;Python + FastAPI&#x27;, &#x27;rationale&#x27;: &#x27;Rapid API development with strong typing and async support&#x27;}, {&#x27;layer&#x27;: &#x27;database&#x27;, &#x27;technology&#x27;: &#x27;PostgreSQL&#x27;, &#x27;rationale&#x27;: &#x27;Reliable relational store, scales well beyond MVP&#x27;}, {&#x27;layer&#x27;: &#x27;auth&#x27;, &#x27;technology&#x27;: &#x27;OAuth2 / JWT-based session auth&#x27;, &#x27;rationale&#x27;: &#x27;Standard, well-supported authentication approach&#x27;}, {&#x27;layer&#x27;: &#x27;deployment&#x27;, &#x27;technology&#x27;: &#x27;Docker + a managed container host (e.g. Fly.io/Render/ECS)&#x27;, &#x27;rationale&#x27;: &#x27;Simple, portable deployment without heavy DevOps investment&#x27;}, {&#x27;layer&#x27;: &#x27;ai&#x27;, &#x27;technology&#x27;: &#x27;LangGraph orchestration + a hosted LLM API (with a local model fallback)&#x27;, &#x27;rationale&#x27;: &#x27;Idea has a clear AI-native advantage - needs an orchestration layer from day one&#x27;}]</td></tr><tr><th>milestone_count</th><td>4</td></tr></table>
+</section>
+
+<section>
+  <h2>Build Status</h2>
+  <table class='kv'><tr><th>status</th><td>build_failed</td></tr><tr><th>steps_completed</th><td>19</td></tr><tr><th>steps_total</th><td>24</td></tr><tr><th>debug_retry_invocations</th><td>0</td></tr></table>
+</section>
+
+<section>
+  <h2>Deployment Status</h2>
+  <table class='kv'><tr><th>status</th><td>skipped</td></tr><tr><th>ready_stage_count</th><td>0</td></tr><tr><th>total_stage_count</th><td>0</td></tr></table>
+</section>
+
+<section>
+  <h2>Growth Status</h2>
+  <table class='kv'><tr><th>status</th><td>skipped</td></tr><tr><th>ready_stage_count</th><td>0</td></tr><tr><th>total_stage_count</th><td>0</td></tr></table>
+</section>
+
+<section>
+  <h2>Overall Health</h2>
+  <p><span class='badge' style='background:#9a6700'>DEGRADED</span></p>
+  <p>Founder Dashboard for &#x27;Build an AI Voice Agent platform for Indian SMBs that can answer phone calls, qualify leads, book appointments, integrate with CRM, and automate customer support.&#x27;: overall health is &#x27;degraded&#x27; (3/7 components healthy).</p>
+</section>
+
+<section>
+  <h2>Pipeline Execution Timeline</h2>
+  <table class="timeline">
+    <tr><th>#</th><th>Stage</th><th>Status</th><th>Passed</th><th>Time</th></tr>
+    <tr><td>1</td><td>Founder Orchestrator</td><td>completed</td><td>✅</td><td>4.65s</td></tr><tr><td>2</td><td>Research Pipeline</td><td>no_data</td><td>✅</td><td>4.87s</td></tr><tr><td>3</td><td>Decision Engine</td><td>completed</td><td>✅</td><td>4.79s</td></tr><tr><td>4</td><td>MVP Planner</td><td>completed</td><td>✅</td><td>4.89s</td></tr><tr><td>5</td><td>AI Builder</td><td>build_failed</td><td>✅</td><td>95.68s</td></tr><tr><td>6</td><td>Deployment Pipeline</td><td>skipped</td><td>✅</td><td>96.10s</td></tr><tr><td>7</td><td>Growth Pipeline</td><td>skipped</td><td>✅</td><td>96.01s</td></tr><tr><td>8</td><td>Founder Dashboard</td><td>completed</td><td>✅</td><td>462.28s</td></tr>
+  </table>
+  <p class="muted">Total pipeline execution time: 769.28s</p>
+</section>
+
+<section>
+  <h2>Alerts</h2>
+  <ul><li>Research Pipeline: status=&#x27;no_data&#x27;</li><li>AI Builder: status=&#x27;build_failed&#x27; - build loop failed: step 19 failed after exhausting retry budget: tool &#x27;execute_loop_step&#x27; timed out after 30.0s</li><li>Deployment Pipeline: status=&#x27;skipped&#x27; - Build was not successful (status=&#x27;build_failed&#x27;) - deployment skipped</li><li>Growth Pipeline: status=&#x27;skipped&#x27; - Deployment was not successful (status=&#x27;skipped&#x27;) - growth activities skipped</li><li>Git Status: unavailable - tool &#x27;git_status&#x27; timed out after 30.0s</li></ul>
+</section>
+
+<section>
+  <h2>Risks</h2>
+  <ul><li>Research Pipeline returned no usable data - these scores are conservative baseline estimates</li><li>Low confidence in these scores - insufficient research data was available</li><li>No clear monetization model identified</li><li>Research Pipeline returned no usable data - these scores are conservative baseline estimates</li><li>Low confidence in these scores - insufficient research data was available</li><li>No clear monetization model identified</li><li>Low confidence in the underlying research/decision scores</li><li>Team/resource availability</li><li>Deployment: Build was not successful (status=&#x27;build_failed&#x27;) - deployment skipped</li><li>Growth: Deployment was not successful (status=&#x27;skipped&#x27;) - growth activities skipped</li></ul>
+</section>
+
+<section>
+  <h2>Recommended Next Actions</h2>
+  <ul><li>Conduct customer discovery interviews</li><li>Build a landing page or prototype to test demand</li><li>Re-run research with research_depth=&#x27;deep&#x27; for stronger signal</li><li>Re-run the Research Pipeline - no usable research data is currently available</li></ul>
+</section>
+
+</main>
+<footer>Generated by scripts/run_afos_demo.py &mdash; AFOS Integration Test Runner and Dashboard Preview</footer>
+</body>
+</html>

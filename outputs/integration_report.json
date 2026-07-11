@@ -1,0 +1,101 @@
+{
+  "idea": "Build an AI Voice Agent platform for Indian SMBs that can answer phone calls, qualify leads, book appointments, integrate with CRM, and automate customer support.",
+  "venture_id": "demo-ai-voice-agent",
+  "research_depth": "standard",
+  "overall_result": "PASS",
+  "components_executed": [
+    "Founder Orchestrator",
+    "Research Pipeline",
+    "Decision Engine",
+    "MVP Planner",
+    "AI Builder",
+    "Deployment Pipeline",
+    "Growth Pipeline",
+    "Founder Dashboard"
+  ],
+  "total_execution_time_seconds": 769.285,
+  "stages": [
+    {
+      "stage": "Founder Orchestrator",
+      "status": "completed",
+      "passed": true,
+      "execution_time_seconds": 4.651,
+      "summary": "Founder pipeline for 'Build an AI Voice Agent platform for Indian SMBs that can answer phone calls, qualify leads, book appointments, integrate with CRM, and automate customer support.' finished with status 'completed'.",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "stage": "Research Pipeline",
+      "status": "no_data",
+      "passed": true,
+      "execution_time_seconds": 4.872,
+      "summary": "",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "stage": "Decision Engine",
+      "status": "completed",
+      "passed": true,
+      "execution_time_seconds": 4.792,
+      "summary": "",
+      "errors": [],
+      "warnings": [
+        "Research Pipeline returned no usable data - these scores are conservative baseline estimates",
+        "Low confidence in these scores - insufficient research data was available",
+        "No clear monetization model identified"
+      ]
+    },
+    {
+      "stage": "MVP Planner",
+      "status": "completed",
+      "passed": true,
+      "execution_time_seconds": 4.889,
+      "summary": "",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "stage": "AI Builder",
+      "status": "build_failed",
+      "passed": true,
+      "execution_time_seconds": 95.683,
+      "summary": "build loop failed: step 19 failed after exhausting retry budget: tool 'execute_loop_step' timed out after 30.0s",
+      "errors": [
+        "build loop failed: step 19 failed after exhausting retry budget: tool 'execute_loop_step' timed out after 30.0s"
+      ],
+      "warnings": []
+    },
+    {
+      "stage": "Deployment Pipeline",
+      "status": "skipped",
+      "passed": true,
+      "execution_time_seconds": 96.104,
+      "summary": "Build was not successful (status='build_failed') - deployment skipped",
+      "errors": [
+        "Build was not successful (status='build_failed') - deployment skipped"
+      ],
+      "warnings": []
+    },
+    {
+      "stage": "Growth Pipeline",
+      "status": "skipped",
+      "passed": true,
+      "execution_time_seconds": 96.013,
+      "summary": "Deployment was not successful (status='skipped') - growth activities skipped",
+      "errors": [
+        "Deployment was not successful (status='skipped') - growth activities skipped"
+      ],
+      "warnings": []
+    },
+    {
+      "stage": "Founder Dashboard",
+      "status": "completed",
+      "passed": true,
+      "execution_time_seconds": 462.281,
+      "summary": "Founder Dashboard for 'Build an AI Voice Agent platform for Indian SMBs that can answer phone calls, qualify leads, book appointments, integrate with CRM, and automate customer support.': overall health is 'degraded' (3/7 components healthy).",
+      "errors": [],
+      "warnings": []
+    }
+  ]
+}
