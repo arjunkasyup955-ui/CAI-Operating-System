@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AFOS Founder Dashboard</title>
+<link rel="stylesheet" href="/dashboard.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<header class="app-header">
+  <div class="header-left">
+    <span class="logo">⬢</span>
+    <span class="app-title">AFOS Founder Dashboard</span>
+  </div>
+  <div class="header-center">
+    <label for="project-selector" class="visually-hidden">Project</label>
+    <select id="project-selector" aria-label="Select project">
+      <option value="">All Projects</option>
+    </select>
+    <input id="global-search" type="search" placeholder="Search history, logs, events...">
+  </div>
+  <div class="header-right">
+    <span id="overall-status-dot" class="status-dot unknown" title="Overall health"></span>
+    <button id="refresh-btn" class="icon-btn" title="Refresh">⟳</button>
+  </div>
+</header>
+
+<div class="app-layout">
+  <nav class="sidebar">
+    <a href="#overview" class="nav-link active" data-section="overview">▣ Overview</a>
+    <a href="#metrics" class="nav-link" data-section="metrics">▤ Metrics</a>
+    <a href="#charts" class="nav-link" data-section="charts">▥ Charts</a>
+    <a href="#history" class="nav-link" data-section="history">▦ History</a>
+    <a href="#jobs" class="nav-link" data-section="jobs">▧ Jobs &amp; Scheduler</a>
+    <a href="#logs" class="nav-link" data-section="logs">▨ Logs</a>
+    <a href="#events" class="nav-link" data-section="events">▩ Events</a>
+    <a href="#export" class="nav-link" data-section="export">⇩ Export</a>
+  </nav>
+
+  <main class="content">
+
+    <section id="overview" class="panel">
+      <div class="card" data-card="overview">
+        <div class="card-header">
+          <h2>Overview</h2>
+          <button class="collapse-toggle" aria-label="Collapse">▾</button>
+        </div>
+        <div class="card-body">
+          <div id="health-grid" class="health-grid">
+            <div class="loading-state">Loading health...</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="metrics" class="panel">
+      <div class="card" data-card="metrics">
+        <div class="card-header">
+          <h2>Metrics</h2>
+          <button class="collapse-toggle" aria-label="Collapse">▾</button>
+        </div>
+        <div class="card-body">
+          <div id="metrics-grid" class="metrics-grid">
+            <div class="loading-state">Loading metrics...</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="charts" class="panel">
+      <div class="card" data-card="charts">
+        <div class="card-header">
+          <h2>Charts</h2>
+          <button class="collapse-toggle" aria-label="Collapse">▾</button>
+        </div>
+        <div class="card-body">
+          <div class="chart-grid">
+            <div class="chart-box"><h3>Pipeline Timeline</h3><canvas id="chart-pipeline_timeline"></canvas></div>
+            <div class="chart-box"><h3>Execution Time</h3><canvas id="chart-execution_time"></canvas></div>
+            <div class="chart-box"><h3>Cache Hit Rate</h3><canvas id="chart-cache_hit_rate"></canvas></div>
+            <div class="chart-box"><h3>Research Confidence</h3><canvas id="chart-research_confidence"></canvas></div>
+            <div class="chart-box"><h3>Competitor Count</h3><canvas id="chart-competitor_count"></canvas></div>
+            <div class="chart-box"><h3>Job Queue</h3><canvas id="chart-job_queue"></canvas></div>
+            <div class="chart-box"><h3>Health Score</h3><canvas id="chart-health_score"></canvas></div>
+            <div class="chart-box"><h3>Overall Score</h3><canvas id="chart-overall_score"></canvas></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="history" class="panel">
+      <div class="card" data-card="history">
+        <div class="card-header">
+          <h2>Execution History</h2>
+          <button class="collapse-toggle" aria-label="Collapse">▾</button>
+        </div>
+        <div class="card-body">
+          <div class="filter-row">
+            <input id="history-search" type="search" placeholder="Search executions...">
+            <select id="history-status-filter">
+              <option value="">All statuses</option>
+              <option value="completed">Completed</option>
+              <option value="failed">Failed</option>
+              <option value="running">Running</option>
+            </select>
+          </div>
+          <div id="history-table-wrap">
+            <div class="loading-state">Loading history...</div>
+          </div>
+          <div id="history-pagination" class="pagination"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="jobs" class="panel">
+      <div class="card" data-card="jobs">
+        <div class="card-header">
+          <h2>Jobs &amp; Scheduler Monitoring</h2>
+          <button class="collapse-toggle" aria-label="Collapse">▾</button>
+        </div>
+        <div class="card-body">
+          <div class="filter-row">
+            <input id="jobs-search" type="search" placeholder="Search jobs...">
+            <select id="jobs-status-filter">
+              <option value="">All statuses</option>
+              <option value="queued">Queued</option>
+              <option value="running">Running</option>
+              <option value="paused">Paused</option>
+              <option value="completed">Completed</option>
+              <option value="failed">Failed</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+          </div>
+          <div id="jobs-table-wrap">
+            <div class="loading-state">Loading jobs...</div>
+          </div>
+          <div id="jobs-pagination" class="pagination"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="logs" class="panel">
+      <div class="card" data-card="logs">
+        <div class="card-header">
+          <h2>Observability Logs</h2>
+          <button class="collapse-toggle" aria-label="Collapse">▾</button>
+        </div>
+        <div class="card-body">
+          <div class="filter-row">
+            <input id="logs-search" type="search" placeholder="Search logs...">
+            <select id="logs-category-filter">
+              <option value="">All categories</option>
+              <option value="execution">Execution</option>
+              <option value="error">Error</option>
+              <option value="agent">Agent</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div id="logs-list-wrap">
+            <div class="loading-state">Loading logs...</div>
+          </div>
+          <div id="logs-pagination" class="pagination"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="events" class="panel">
+      <div class="card" data-card="events">
+        <div class="card-header">
+          <h2>Pipeline Events</h2>
+          <button class="collapse-toggle" aria-label="Collapse">▾</button>
+        </div>
+        <div class="card-body">
+          <div id="events-list-wrap">
+            <div class="loading-state">Loading events...</div>
+          </div>
+          <div id="events-pagination" class="pagination"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="export" class="panel">
+      <div class="card" data-card="export">
+        <div class="card-header">
+          <h2>Export</h2>
+          <button class="collapse-toggle" aria-label="Collapse">▾</button>
+        </div>
+        <div class="card-body">
+          <div class="export-buttons">
+            <button class="export-btn" data-format="json">⇩ Export JSON</button>
+            <button class="export-btn" data-format="csv">⇩ Export CSV</button>
+            <button class="export-btn" data-format="html">⇩ Export HTML Report</button>
+            <button class="export-btn" data-format="pdf">⇩ Export PDF</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<div id="notifications" class="notifications" aria-live="polite"></div>
+<div id="loading-overlay" class="loading-overlay hidden"><div class="spinner"></div></div>
+
+<script src="/dashboard.js"></script>
+</body>
+</html>
