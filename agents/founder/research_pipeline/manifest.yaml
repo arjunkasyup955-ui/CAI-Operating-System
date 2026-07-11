@@ -1,0 +1,22 @@
+name: research_pipeline
+responsibilities:
+  - Automatically execute Search, Browser, Market Intelligence, Competitor
+    Intelligence, Trend Intelligence, Opportunity Detection, and Idea Validation
+    in sequence for a given idea, reusing every one of those agents unmodified,
+    and return a structured FounderResearchReport
+  - Publish a pipeline-level event before and after every stage, and continue
+    gracefully if any single stage fails rather than aborting the whole run
+inputs:
+  - idea (str)
+  - venture_id (str)
+  - optional research_depth ("standard" | "deep")
+outputs:
+  - FounderResearchReport (search_results, browser_findings, market_analysis,
+    competitor_analysis, trend_analysis, opportunity_analysis, idea_validation,
+    sources, confidence_score, stage_results, status)
+tools: []
+permissions:
+  - internet_access
+supervisor: null
+lifecycle: active
+version: "0.1.0"
