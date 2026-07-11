@@ -1,0 +1,24 @@
+name: decision_engine
+responsibilities:
+  - Consume the completed Research Pipeline's FounderResearchReport and produce a
+    deterministic, pure-Python FounderDecisionReport - opportunity, competition,
+    risk, market-size, build-difficulty, execution-complexity, revenue-potential,
+    market-timing, and AI-advantage scores, an overall weighted score, and a
+    BUILD NOW / VALIDATE FIRST / PIVOT / DROP recommendation
+  - Never calls an external API, Tool Registry tool, or LLM directly - the only
+    thing this agent reaches outside itself for is the already-completed
+    Research Pipeline (Phase 4 Component 2)
+inputs:
+  - idea (str)
+  - venture_id (str)
+  - optional research_depth ("standard" | "deep")
+outputs:
+  - FounderDecisionReport (idea, opportunity_score, competition_score,
+    risk_score, market_size_score, build_difficulty, execution_complexity,
+    revenue_potential, market_timing, ai_advantage, confidence_score,
+    overall_score, recommendation, reasons, warnings, next_actions, status)
+tools: []
+permissions: []
+supervisor: null
+lifecycle: active
+version: "0.1.0"
