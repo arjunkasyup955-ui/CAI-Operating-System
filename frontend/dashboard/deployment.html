@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AFOS Deployment</title>
+<link rel="stylesheet" href="/deployment.css">
+</head>
+<body>
+<header class="app-header">
+  <div class="header-left">
+    <span class="logo">⬢</span>
+    <span class="app-title">AFOS Deployment</span>
+  </div>
+  <div class="header-center">
+    <label for="project-selector" class="visually-hidden">Project</label>
+    <select id="project-selector" aria-label="Select project">
+      <option value="">Select a venture...</option>
+    </select>
+    <select id="target-selector" aria-label="Select deployment target">
+      <option value="">All targets</option>
+      <option value="github">GitHub</option>
+      <option value="docker">Docker</option>
+      <option value="docker_compose">Docker Compose</option>
+      <option value="vercel">Vercel</option>
+      <option value="railway">Railway</option>
+      <option value="render">Render</option>
+      <option value="flyio">Fly.io</option>
+      <option value="kubernetes">Kubernetes</option>
+    </select>
+  </div>
+  <div class="header-right">
+    <span id="overall-status-dot" class="status-dot unknown" title="Overall deployment health"></span>
+    <button id="refresh-btn" class="icon-btn" title="Refresh">⟳</button>
+  </div>
+</header>
+
+<div class="app-layout">
+  <nav class="sidebar">
+    <a href="#status" class="nav-link active" data-section="status">▣ Deployment Status</a>
+    <a href="#environment" class="nav-link" data-section="environment">▤ Current Environment</a>
+    <a href="#latest" class="nav-link" data-section="latest">▥ Latest Build</a>
+    <a href="#history" class="nav-link" data-section="history">▦ Deployment History</a>
+    <a href="#health" class="nav-link" data-section="health">▧ Health Status</a>
+    <a href="#rollback" class="nav-link" data-section="rollback">⟲ Rollback</a>
+  </nav>
+
+  <main class="content">
+
+    <section id="status" class="panel">
+      <div class="card" data-card="status">
+        <div class="card-header"><h2>Deployment Status</h2><button class="collapse-toggle" aria-label="Collapse">▾</button></div>
+        <div class="card-body"><div id="status-table-wrap"><div class="loading-state">Loading deployment status...</div></div></div>
+      </div>
+    </section>
+
+    <section id="environment" class="panel">
+      <div class="card" data-card="environment">
+        <div class="card-header"><h2>Current Environment</h2><button class="collapse-toggle" aria-label="Collapse">▾</button></div>
+        <div class="card-body"><div id="environment-wrap"><div class="loading-state">Loading environment...</div></div></div>
+      </div>
+    </section>
+
+    <section id="latest" class="panel">
+      <div class="card" data-card="latest">
+        <div class="card-header"><h2>Latest Build</h2><button class="collapse-toggle" aria-label="Collapse">▾</button></div>
+        <div class="card-body"><div id="latest-wrap"><div class="loading-state">Loading latest build...</div></div></div>
+      </div>
+    </section>
+
+    <section id="history" class="panel">
+      <div class="card" data-card="history">
+        <div class="card-header"><h2>Deployment History</h2><button class="collapse-toggle" aria-label="Collapse">▾</button></div>
+        <div class="card-body">
+          <div id="history-table-wrap"><div class="loading-state">Loading history...</div></div>
+          <div id="history-pagination" class="pagination"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="health" class="panel">
+      <div class="card" data-card="health">
+        <div class="card-header"><h2>Health Status</h2><button class="collapse-toggle" aria-label="Collapse">▾</button></div>
+        <div class="card-body"><div id="health-grid" class="health-grid"><div class="loading-state">Loading health...</div></div></div>
+      </div>
+    </section>
+
+    <section id="rollback" class="panel">
+      <div class="card" data-card="rollback">
+        <div class="card-header"><h2>Rollback</h2><button class="collapse-toggle" aria-label="Collapse">▾</button></div>
+        <div class="card-body">
+          <div class="filter-row">
+            <input id="rollback-deployment-id" type="text" placeholder="Deployment ID to roll back to">
+            <button id="rollback-btn" class="export-btn">⟲ Rollback</button>
+          </div>
+          <div id="rollback-result-wrap"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<div id="notifications" class="notifications" aria-live="polite"></div>
+<div id="loading-overlay" class="loading-overlay hidden"><div class="spinner"></div></div>
+
+<script src="/deployment.js"></script>
+</body>
+</html>
