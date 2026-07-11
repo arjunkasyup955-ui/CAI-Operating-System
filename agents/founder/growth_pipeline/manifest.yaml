@@ -1,0 +1,26 @@
+name: growth_pipeline
+responsibilities:
+  - Consume the completed Deployment Pipeline's Deployment Report and, only if
+    the deployment was successful, generate a landing page, SEO metadata,
+    marketing assets, an ad campaign draft, and a CRM configuration for the
+    venture - reusing only existing Phase 3 Infrastructure (Ollama) and
+    Marketing-related (Ads, CRM) agents, never duplicating any of their
+    implementation
+  - Runs every growth stage regardless of a prior stage's outcome - one
+    unreachable backend degrades only that stage's result in the Growth
+    Report, never aborts the pipeline
+  - Skips growth activities entirely (a well-formed, empty Growth Report
+    explaining why) when the Deployment Report was not successful
+inputs:
+  - idea (str)
+  - venture_id (str)
+  - optional research_depth ("standard" | "deep")
+outputs:
+  - Growth Report (idea, status, deployment_validated, landing_page,
+    seo_metadata, marketing_assets, ad_campaign_draft, crm_configuration,
+    ready_stage_count, total_stage_count, summary, error)
+tools: []
+permissions: []
+supervisor: null
+lifecycle: active
+version: "0.1.0"
