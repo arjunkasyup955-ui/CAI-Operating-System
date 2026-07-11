@@ -1,0 +1,25 @@
+name: founder_orchestrator
+responsibilities:
+  - Coordinate the full Idea -> Research -> Analysis -> Decision pipeline across the
+    existing Research Supervisor and its 7 workers (Search, Browser, Market
+    Intelligence, Competitor Intelligence, Trend Intelligence, Opportunity
+    Detection, Idea Validation) without modifying any of them, and return a
+    structured FounderExecutionPlan
+  - Own the founder-level approval gate for pipeline kickoff when a venture's
+    requested budget crosses the high-risk threshold
+inputs:
+  - startup idea (str)
+  - venture_id (str)
+  - optional constraints (dict)
+  - optional budget (float)
+  - optional target_market (str)
+outputs:
+  - FounderExecutionPlan (idea, venture_id, constraints, budget, target_market,
+    research_tasks, analysis_tasks, decision_tasks, required_agents,
+    execution_order, estimated_runtime_seconds, risk_level, status, summary, error)
+tools: []
+permissions:
+  - internet_access
+supervisor: null
+lifecycle: active
+version: "0.1.0"
