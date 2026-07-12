@@ -13,13 +13,13 @@
     "Growth Pipeline",
     "Founder Dashboard"
   ],
-  "total_execution_time_seconds": 766.571,
+  "total_execution_time_seconds": 276.32,
   "stages": [
     {
       "stage": "Founder Orchestrator",
       "status": "completed",
       "passed": true,
-      "execution_time_seconds": 4.535,
+      "execution_time_seconds": 4.556,
       "summary": "Founder pipeline for 'Build an AI Voice Agent platform for Indian SMBs that can answer phone calls, qualify leads, book appointments, integrate with CRM, and automate customer support.' finished with status 'completed'.",
       "errors": [],
       "warnings": []
@@ -28,7 +28,7 @@
       "stage": "Research Pipeline",
       "status": "no_data",
       "passed": true,
-      "execution_time_seconds": 4.433,
+      "execution_time_seconds": 4.41,
       "summary": "",
       "errors": [],
       "warnings": []
@@ -37,7 +37,7 @@
       "stage": "Decision Engine",
       "status": "completed",
       "passed": true,
-      "execution_time_seconds": 4.393,
+      "execution_time_seconds": 4.436,
       "summary": "",
       "errors": [],
       "warnings": [
@@ -50,30 +50,28 @@
       "stage": "MVP Planner",
       "status": "completed",
       "passed": true,
-      "execution_time_seconds": 4.456,
+      "execution_time_seconds": 4.453,
       "summary": "",
       "errors": [],
       "warnings": []
     },
     {
       "stage": "AI Builder",
-      "status": "build_failed",
+      "status": "completed",
       "passed": true,
-      "execution_time_seconds": 94.836,
-      "summary": "build loop failed: step 19 failed after exhausting retry budget: tool 'execute_loop_step' timed out after 30.0s",
-      "errors": [
-        "build loop failed: step 19 failed after exhausting retry budget: tool 'execute_loop_step' timed out after 30.0s"
-      ],
+      "execution_time_seconds": 22.313,
+      "summary": "AI Builder completed 'Build an AI Voice Agent platform for Indian SMBs that can answer phone calls, qualify leads, book appointments, integrate with CRM, and automate customer support.' - 24/24 steps executed.",
+      "errors": [],
       "warnings": []
     },
     {
       "stage": "Deployment Pipeline",
-      "status": "skipped",
+      "status": "partial",
       "passed": true,
-      "execution_time_seconds": 95.689,
-      "summary": "Build was not successful (status='build_failed') - deployment skipped",
+      "execution_time_seconds": 47.199,
+      "summary": "Deployment for 'Build an AI Voice Agent platform for Indian SMBs that can answer phone calls, qualify leads, book appointments, integrate with CRM, and automate customer support.': 1/5 infrastructure stages ready.",
       "errors": [
-        "Build was not successful (status='build_failed') - deployment skipped"
+        "the docker SDK (docker-py) is not installed or not functional - `pip install docker`; psycopg[binary] and psycopg_pool are not installed - `pip install \"psycopg[binary,pool]\"`; chromadb is not installed - `pip install chromadb`; [WinError 10061] No connection could be made because the target machine actively refused it"
       ],
       "warnings": []
     },
@@ -81,10 +79,10 @@
       "stage": "Growth Pipeline",
       "status": "skipped",
       "passed": true,
-      "execution_time_seconds": 95.687,
-      "summary": "Deployment was not successful (status='skipped') - growth activities skipped",
+      "execution_time_seconds": 44.605,
+      "summary": "Deployment was not successful (status='partial') - growth activities skipped",
       "errors": [
-        "Deployment was not successful (status='skipped') - growth activities skipped"
+        "Deployment was not successful (status='partial') - growth activities skipped"
       ],
       "warnings": []
     },
@@ -92,8 +90,8 @@
       "stage": "Founder Dashboard",
       "status": "completed",
       "passed": true,
-      "execution_time_seconds": 462.542,
-      "summary": "Founder Dashboard for 'Build an AI Voice Agent platform for Indian SMBs that can answer phone calls, qualify leads, book appointments, integrate with CRM, and automate customer support.': overall health is 'degraded' (3/7 components healthy).",
+      "execution_time_seconds": 144.348,
+      "summary": "Founder Dashboard for 'Build an AI Voice Agent platform for Indian SMBs that can answer phone calls, qualify leads, book appointments, integrate with CRM, and automate customer support.': overall health is 'degraded' (5/7 components healthy).",
       "errors": [],
       "warnings": []
     }

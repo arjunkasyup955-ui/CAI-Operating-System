@@ -89,15 +89,15 @@
     "milestone_count": 4
   },
   "build_status": {
-    "status": "build_failed",
-    "steps_completed": 19,
+    "status": "completed",
+    "steps_completed": 24,
     "steps_total": 24,
     "debug_retry_invocations": 0
   },
   "deployment_status": {
-    "status": "skipped",
-    "ready_stage_count": 0,
-    "total_stage_count": 0
+    "status": "partial",
+    "ready_stage_count": 1,
+    "total_stage_count": 5
   },
   "growth_status": {
     "status": "skipped",
@@ -105,16 +105,13 @@
     "total_stage_count": 0
   },
   "git_status": {
-    "available": false,
-    "output": "",
-    "error": "tool 'git_status' timed out after 30.0s"
+    "available": true,
+    "output": "On branch phase-1\nYour branch is ahead of 'origin/phase-1' by 6 commits.\n  (use \"git push\" to publish your local commits)\n\nChanges not staged for commit:\n  (use \"git add <file>...\" to update what will be committed)\n  (use \"git restore <file>...\" to discard changes in working directory)\n\tmodified:   database/afos.db-wal\n\nno changes added to commit (use \"git add\" and/or \"git commit -a\")\n",
+    "error": ""
   },
   "alerts": [
     "Research Pipeline: status='no_data'",
-    "AI Builder: status='build_failed' - build loop failed: step 19 failed after exhausting retry budget: tool 'execute_loop_step' timed out after 30.0s",
-    "Deployment Pipeline: status='skipped' - Build was not successful (status='build_failed') - deployment skipped",
-    "Growth Pipeline: status='skipped' - Deployment was not successful (status='skipped') - growth activities skipped",
-    "Git Status: unavailable - tool 'git_status' timed out after 30.0s"
+    "Growth Pipeline: status='skipped' - Deployment was not successful (status='partial') - growth activities skipped"
   ],
   "risks": [
     "Research Pipeline returned no usable data - these scores are conservative baseline estimates",
@@ -125,8 +122,8 @@
     "No clear monetization model identified",
     "Low confidence in the underlying research/decision scores",
     "Team/resource availability",
-    "Deployment: Build was not successful (status='build_failed') - deployment skipped",
-    "Growth: Deployment was not successful (status='skipped') - growth activities skipped"
+    "Deployment: the docker SDK (docker-py) is not installed or not functional - `pip install docker`; psycopg[binary] and psycopg_pool are not installed - `pip install \"psycopg[binary,pool]\"`; chromadb is not installed - `pip install chromadb`; [WinError 10061] No connection could be made because the target machine actively refused it",
+    "Growth: Deployment was not successful (status='partial') - growth activities skipped"
   ],
   "recommended_next_actions": [
     "Conduct customer discovery interviews",
@@ -134,6 +131,6 @@
     "Re-run research with research_depth='deep' for stronger signal",
     "Re-run the Research Pipeline - no usable research data is currently available"
   ],
-  "summary": "Founder Dashboard for 'Build an AI Voice Agent platform for Indian SMBs that can answer phone calls, qualify leads, book appointments, integrate with CRM, and automate customer support.': overall health is 'degraded' (3/7 components healthy).",
+  "summary": "Founder Dashboard for 'Build an AI Voice Agent platform for Indian SMBs that can answer phone calls, qualify leads, book appointments, integrate with CRM, and automate customer support.': overall health is 'degraded' (5/7 components healthy).",
   "error": ""
 }

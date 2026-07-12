@@ -78,12 +78,12 @@
 
 <section>
   <h2>Build Status</h2>
-  <table class='kv'><tr><th>status</th><td>build_failed</td></tr><tr><th>steps_completed</th><td>19</td></tr><tr><th>steps_total</th><td>24</td></tr><tr><th>debug_retry_invocations</th><td>0</td></tr></table>
+  <table class='kv'><tr><th>status</th><td>completed</td></tr><tr><th>steps_completed</th><td>24</td></tr><tr><th>steps_total</th><td>24</td></tr><tr><th>debug_retry_invocations</th><td>0</td></tr></table>
 </section>
 
 <section>
   <h2>Deployment Status</h2>
-  <table class='kv'><tr><th>status</th><td>skipped</td></tr><tr><th>ready_stage_count</th><td>0</td></tr><tr><th>total_stage_count</th><td>0</td></tr></table>
+  <table class='kv'><tr><th>status</th><td>partial</td></tr><tr><th>ready_stage_count</th><td>1</td></tr><tr><th>total_stage_count</th><td>5</td></tr></table>
 </section>
 
 <section>
@@ -94,26 +94,26 @@
 <section>
   <h2>Overall Health</h2>
   <p><span class='badge' style='background:#9a6700'>DEGRADED</span></p>
-  <p>Founder Dashboard for &#x27;Build an AI Voice Agent platform for Indian SMBs that can answer phone calls, qualify leads, book appointments, integrate with CRM, and automate customer support.&#x27;: overall health is &#x27;degraded&#x27; (3/7 components healthy).</p>
+  <p>Founder Dashboard for &#x27;Build an AI Voice Agent platform for Indian SMBs that can answer phone calls, qualify leads, book appointments, integrate with CRM, and automate customer support.&#x27;: overall health is &#x27;degraded&#x27; (5/7 components healthy).</p>
 </section>
 
 <section>
   <h2>Pipeline Execution Timeline</h2>
   <table class="timeline">
     <tr><th>#</th><th>Stage</th><th>Status</th><th>Passed</th><th>Time</th></tr>
-    <tr><td>1</td><td>Founder Orchestrator</td><td>completed</td><td>✅</td><td>4.54s</td></tr><tr><td>2</td><td>Research Pipeline</td><td>no_data</td><td>✅</td><td>4.43s</td></tr><tr><td>3</td><td>Decision Engine</td><td>completed</td><td>✅</td><td>4.39s</td></tr><tr><td>4</td><td>MVP Planner</td><td>completed</td><td>✅</td><td>4.46s</td></tr><tr><td>5</td><td>AI Builder</td><td>build_failed</td><td>✅</td><td>94.84s</td></tr><tr><td>6</td><td>Deployment Pipeline</td><td>skipped</td><td>✅</td><td>95.69s</td></tr><tr><td>7</td><td>Growth Pipeline</td><td>skipped</td><td>✅</td><td>95.69s</td></tr><tr><td>8</td><td>Founder Dashboard</td><td>completed</td><td>✅</td><td>462.54s</td></tr>
+    <tr><td>1</td><td>Founder Orchestrator</td><td>completed</td><td>✅</td><td>4.56s</td></tr><tr><td>2</td><td>Research Pipeline</td><td>no_data</td><td>✅</td><td>4.41s</td></tr><tr><td>3</td><td>Decision Engine</td><td>completed</td><td>✅</td><td>4.44s</td></tr><tr><td>4</td><td>MVP Planner</td><td>completed</td><td>✅</td><td>4.45s</td></tr><tr><td>5</td><td>AI Builder</td><td>completed</td><td>✅</td><td>22.31s</td></tr><tr><td>6</td><td>Deployment Pipeline</td><td>partial</td><td>✅</td><td>47.20s</td></tr><tr><td>7</td><td>Growth Pipeline</td><td>skipped</td><td>✅</td><td>44.60s</td></tr><tr><td>8</td><td>Founder Dashboard</td><td>completed</td><td>✅</td><td>144.35s</td></tr>
   </table>
-  <p class="muted">Total pipeline execution time: 766.57s</p>
+  <p class="muted">Total pipeline execution time: 276.32s</p>
 </section>
 
 <section>
   <h2>Alerts</h2>
-  <ul><li>Research Pipeline: status=&#x27;no_data&#x27;</li><li>AI Builder: status=&#x27;build_failed&#x27; - build loop failed: step 19 failed after exhausting retry budget: tool &#x27;execute_loop_step&#x27; timed out after 30.0s</li><li>Deployment Pipeline: status=&#x27;skipped&#x27; - Build was not successful (status=&#x27;build_failed&#x27;) - deployment skipped</li><li>Growth Pipeline: status=&#x27;skipped&#x27; - Deployment was not successful (status=&#x27;skipped&#x27;) - growth activities skipped</li><li>Git Status: unavailable - tool &#x27;git_status&#x27; timed out after 30.0s</li></ul>
+  <ul><li>Research Pipeline: status=&#x27;no_data&#x27;</li><li>Growth Pipeline: status=&#x27;skipped&#x27; - Deployment was not successful (status=&#x27;partial&#x27;) - growth activities skipped</li></ul>
 </section>
 
 <section>
   <h2>Risks</h2>
-  <ul><li>Research Pipeline returned no usable data - these scores are conservative baseline estimates</li><li>Low confidence in these scores - insufficient research data was available</li><li>No clear monetization model identified</li><li>Research Pipeline returned no usable data - these scores are conservative baseline estimates</li><li>Low confidence in these scores - insufficient research data was available</li><li>No clear monetization model identified</li><li>Low confidence in the underlying research/decision scores</li><li>Team/resource availability</li><li>Deployment: Build was not successful (status=&#x27;build_failed&#x27;) - deployment skipped</li><li>Growth: Deployment was not successful (status=&#x27;skipped&#x27;) - growth activities skipped</li></ul>
+  <ul><li>Research Pipeline returned no usable data - these scores are conservative baseline estimates</li><li>Low confidence in these scores - insufficient research data was available</li><li>No clear monetization model identified</li><li>Research Pipeline returned no usable data - these scores are conservative baseline estimates</li><li>Low confidence in these scores - insufficient research data was available</li><li>No clear monetization model identified</li><li>Low confidence in the underlying research/decision scores</li><li>Team/resource availability</li><li>Deployment: the docker SDK (docker-py) is not installed or not functional - `pip install docker`; psycopg[binary] and psycopg_pool are not installed - `pip install &quot;psycopg[binary,pool]&quot;`; chromadb is not installed - `pip install chromadb`; [WinError 10061] No connection could be made because the target machine actively refused it</li><li>Growth: Deployment was not successful (status=&#x27;partial&#x27;) - growth activities skipped</li></ul>
 </section>
 
 <section>
