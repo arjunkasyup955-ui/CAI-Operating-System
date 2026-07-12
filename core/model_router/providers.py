@@ -10,6 +10,11 @@ _OPENAI_PRICING_PER_1K = {
     "gpt-4o": {"input": 0.005, "output": 0.015},
 }
 
+_GOOGLE_PRICING_PER_1K = {
+    "gemini-flash-latest": {"input": 0.0003, "output": 0.0025},
+    "gemini-pro-latest": {"input": 0.00125, "output": 0.01},
+}
+
 
 class ChatMessage(TypedDict):
     role: str
@@ -56,6 +61,55 @@ class OpenAIProvider:
         cost_usd = (input_tokens / 1000) * pricing["input"] + (output_tokens / 1000) * pricing["output"]
         return ModelResponse(
             content=completion.choices[0].message.content or "",
+            model=model,
+            provider=self.name,
+            input_tokens=input_tokens,
+            output_tokens=output_tokens,
+            cost_usd=cost_usd,
+        )
+
+
+class GoogleProvider:
+    """Gemini via Google's REST API directly (no google-generativeai SDK dependency needed)."""
+
+    name = "google"
+
+    def chat(self, messages: list[ChatMessage], model: str, **kwargs: object) -> ModelResponse:
+        import httpx
+
+        api_key = get_settings().google_api_key
+        if not api_key:
+            raise RuntimeError("GOOGLE_API_KEY is not configured")
+
+        system_parts: list[str] = []
+        contents = []
+        for message in messages:
+            if message["role"] == "system":
+                system_parts.append(message["content"])
+                continue
+            role = "model" if message["role"] == "assistant" else "user"
+            contents.append({"role": role, "parts": [{"text": message["content"]}]})
+
+        body: dict[str, object] = {"contents": contents}
+        if system_parts:
+            body["systemInstruction"] = {"parts": [{"text": "\n".join(system_parts)}]}
+
+        response = httpx.post(
+            f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
+            params={"key": api_key},
+            json=body,
+            timeout=kwargs.get("timeout", 60.0),
+        )
+        response.raise_for_status()
+        data = response.json()
+        content = data["candidates"][0]["content"]["parts"][0]["text"]
+        usage = data.get("usageMetadata", {})
+        input_tokens = usage.get("promptTokenCount", 0)
+        output_tokens = usage.get("candidatesTokenCount", 0)
+        pricing = _GOOGLE_PRICING_PER_1K.get(model, {"input": 0.0, "output": 0.0})
+        cost_usd = (input_tokens / 1000) * pricing["input"] + (output_tokens / 1000) * pricing["output"]
+        return ModelResponse(
+            content=content,
             model=model,
             provider=self.name,
             input_tokens=input_tokens,

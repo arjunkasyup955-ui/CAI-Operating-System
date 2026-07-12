@@ -5,7 +5,14 @@ from pathlib import Path
 import yaml
 
 from core.event_bus import AFOSEvent, get_event_bus
-from core.model_router.providers import ChatMessage, ChatProvider, ModelResponse, OllamaProvider, OpenAIProvider
+from core.model_router.providers import (
+    ChatMessage,
+    ChatProvider,
+    GoogleProvider,
+    ModelResponse,
+    OllamaProvider,
+    OpenAIProvider,
+)
 
 logger = logging.getLogger("afos.model_router")
 
@@ -67,6 +74,7 @@ def get_model_router() -> ModelRouter:
     with open(_ROUTING_FILE, encoding="utf-8") as f:
         routing_table = yaml.safe_load(f)
     providers: dict[str, ChatProvider] = {
+        "google": GoogleProvider(),
         "openai": OpenAIProvider(),
         "ollama": OllamaProvider(),
     }
