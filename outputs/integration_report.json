@@ -13,13 +13,13 @@
     "Growth Pipeline",
     "Founder Dashboard"
   ],
-  "total_execution_time_seconds": 769.285,
+  "total_execution_time_seconds": 768.174,
   "stages": [
     {
       "stage": "Founder Orchestrator",
       "status": "completed",
       "passed": true,
-      "execution_time_seconds": 4.651,
+      "execution_time_seconds": 4.682,
       "summary": "Founder pipeline for 'Build an AI Voice Agent platform for Indian SMBs that can answer phone calls, qualify leads, book appointments, integrate with CRM, and automate customer support.' finished with status 'completed'.",
       "errors": [],
       "warnings": []
@@ -28,7 +28,7 @@
       "stage": "Research Pipeline",
       "status": "no_data",
       "passed": true,
-      "execution_time_seconds": 4.872,
+      "execution_time_seconds": 4.62,
       "summary": "",
       "errors": [],
       "warnings": []
@@ -37,7 +37,7 @@
       "stage": "Decision Engine",
       "status": "completed",
       "passed": true,
-      "execution_time_seconds": 4.792,
+      "execution_time_seconds": 4.679,
       "summary": "",
       "errors": [],
       "warnings": [
@@ -50,7 +50,7 @@
       "stage": "MVP Planner",
       "status": "completed",
       "passed": true,
-      "execution_time_seconds": 4.889,
+      "execution_time_seconds": 4.677,
       "summary": "",
       "errors": [],
       "warnings": []
@@ -59,7 +59,7 @@
       "stage": "AI Builder",
       "status": "build_failed",
       "passed": true,
-      "execution_time_seconds": 95.683,
+      "execution_time_seconds": 95.512,
       "summary": "build loop failed: step 19 failed after exhausting retry budget: tool 'execute_loop_step' timed out after 30.0s",
       "errors": [
         "build loop failed: step 19 failed after exhausting retry budget: tool 'execute_loop_step' timed out after 30.0s"
@@ -70,7 +70,7 @@
       "stage": "Deployment Pipeline",
       "status": "skipped",
       "passed": true,
-      "execution_time_seconds": 96.104,
+      "execution_time_seconds": 95.685,
       "summary": "Build was not successful (status='build_failed') - deployment skipped",
       "errors": [
         "Build was not successful (status='build_failed') - deployment skipped"
@@ -81,7 +81,7 @@
       "stage": "Growth Pipeline",
       "status": "skipped",
       "passed": true,
-      "execution_time_seconds": 96.013,
+      "execution_time_seconds": 95.531,
       "summary": "Deployment was not successful (status='skipped') - growth activities skipped",
       "errors": [
         "Deployment was not successful (status='skipped') - growth activities skipped"
@@ -92,7 +92,7 @@
       "stage": "Founder Dashboard",
       "status": "completed",
       "passed": true,
-      "execution_time_seconds": 462.281,
+      "execution_time_seconds": 462.788,
       "summary": "Founder Dashboard for 'Build an AI Voice Agent platform for Indian SMBs that can answer phone calls, qualify leads, book appointments, integrate with CRM, and automate customer support.': overall health is 'degraded' (3/7 components healthy).",
       "errors": [],
       "warnings": []
