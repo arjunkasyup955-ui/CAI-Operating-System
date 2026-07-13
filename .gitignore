@@ -18,6 +18,8 @@ venv/
 
 # Database
 *.db
+*.db-shm
+*.db-wal
 
 # VS Code
 .vscode/
@@ -25,3 +27,8 @@ venv/
 # OS Files
 .DS_Store
 Thumbs.db
+
+# Generated reports (regenerated on every demo/validation run - same
+# treatment as *.db above; nothing in the codebase depends on these being
+# tracked, confirmed via grep across scripts/smoke_test_phase*.py)
+outputs/
