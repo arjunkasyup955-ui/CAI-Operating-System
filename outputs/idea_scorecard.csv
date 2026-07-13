@@ -1,0 +1,2 @@
+idea,venture_id,overall_score,recommendation,status,opportunity_score,competition_score,risk_score,market_size_score,build_difficulty,execution_complexity,revenue_potential,market_timing,ai_advantage,confidence_score,top_reason,top_warning,execution_time_seconds,error
+AI Voice Agent for Indian SMEs,val-test-voice-agent,5.96,PIVOT,completed,5.0,8.0,9.0,5.0,5.0,5.0,5.0,5.0,7.4,0.57,Low competitive saturation detected,Low confidence in these scores - insufficient research data was available,6.599,
