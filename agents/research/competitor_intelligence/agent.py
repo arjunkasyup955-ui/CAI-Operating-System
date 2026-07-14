@@ -98,7 +98,7 @@ def _build_report(idea: str, context: str, sources: list[str]) -> CompetitorInte
         [{"role": "user", "content": prompt}],
         capability="high-reasoning",
         agent_name="competitor_intelligence_agent",
-        timeout=120.0,
+        timeout=300.0,
     )
     data = json.loads(_extract_json(response.content))
     data["sources_used"] = sources

@@ -118,6 +118,42 @@ class GoogleProvider:
         )
 
 
+class NvidiaProvider:
+    """NVIDIA NIM hosted inference (Nemotron family) via its OpenAI-compatible
+    REST API - same self-contained httpx style as GoogleProvider/OllamaProvider,
+    no new SDK dependency. Endpoint and auth verified standalone in
+    scripts/test_nemotron_api.py before this integration.
+    """
+
+    name = "nvidia"
+
+    def chat(self, messages: list[ChatMessage], model: str, **kwargs: object) -> ModelResponse:
+        import httpx
+
+        api_key = get_settings().nvidia_api_key
+        if not api_key:
+            raise RuntimeError("NVIDIA_API_KEY is not configured")
+
+        response = httpx.post(
+            "https://integrate.api.nvidia.com/v1/chat/completions",
+            headers={"Authorization": f"Bearer {api_key}"},
+            json={"model": model, "messages": messages, "max_tokens": kwargs.get("max_tokens", 1024)},
+            timeout=kwargs.get("timeout", 60.0),
+        )
+        response.raise_for_status()
+        data = response.json()
+        content = data["choices"][0]["message"]["content"] or ""
+        usage = data.get("usage", {})
+        return ModelResponse(
+            content=content,
+            model=model,
+            provider=self.name,
+            input_tokens=usage.get("prompt_tokens", 0),
+            output_tokens=usage.get("completion_tokens", 0),
+            cost_usd=0.0,  # NVIDIA NIM hosted free-tier - no published per-token billing
+        )
+
+
 class OllamaProvider:
     """Local models via Ollama's REST API over httpx - no SDK dependency needed."""
 

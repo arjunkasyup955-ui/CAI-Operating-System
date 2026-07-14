@@ -10,6 +10,7 @@ load_dotenv()
 class Settings(BaseModel):
     openai_api_key: str = ""
     google_api_key: str = ""
+    nvidia_api_key: str = ""
     ollama_base_url: str = "http://localhost:11434"
 
     langchain_tracing_v2: bool = False
@@ -27,6 +28,7 @@ def get_settings() -> Settings:
     return Settings(
         openai_api_key=os.environ.get("OPENAI_API_KEY", ""),
         google_api_key=os.environ.get("GOOGLE_API_KEY", ""),
+        nvidia_api_key=os.environ.get("NVIDIA_API_KEY", ""),
         ollama_base_url=os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434"),
         langchain_tracing_v2=os.environ.get("LANGCHAIN_TRACING_V2", "false").lower() == "true",
         langchain_api_key=os.environ.get("LANGCHAIN_API_KEY", ""),

@@ -9,6 +9,8 @@ default:
     model: qwen3:8b
 
 high-reasoning:
+  - provider: nvidia
+    model: mistralai/mistral-nemotron
   - provider: google
     model: gemini-flash-latest
   - provider: openai

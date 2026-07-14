@@ -10,6 +10,7 @@ from core.model_router.providers import (
     ChatProvider,
     GoogleProvider,
     ModelResponse,
+    NvidiaProvider,
     OllamaProvider,
     OpenAIProvider,
 )
@@ -77,5 +78,6 @@ def get_model_router() -> ModelRouter:
         "google": GoogleProvider(),
         "openai": OpenAIProvider(),
         "ollama": OllamaProvider(),
+        "nvidia": NvidiaProvider(),
     }
     return ModelRouter(routing_table, providers)
