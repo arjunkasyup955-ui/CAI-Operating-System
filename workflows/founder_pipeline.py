@@ -83,7 +83,7 @@ _EXECUTION_ORDER = [
 # Module-level, overridable in tests - real defaults are conservative; the smoke
 # test lowers these to keep the deliberately-slow-timeout scenario fast.
 _HIGH_BUDGET_APPROVAL_THRESHOLD_USD = 1000.0
-_RESEARCH_TIMEOUT_SECONDS = 30.0
+_RESEARCH_TIMEOUT_SECONDS = 300.0
 _RESEARCH_MAX_ATTEMPTS = 2
 _RESEARCH_BACKOFF_SECONDS = 0.5
 

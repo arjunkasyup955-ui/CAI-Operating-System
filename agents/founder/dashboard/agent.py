@@ -94,6 +94,7 @@ class FounderDashboard(BaseModel):
     research_summary: ResearchSummary = ResearchSummary()
     market_analysis: dict[str, Any] = {}
     competitor_summary: dict[str, Any] = {}
+    research_data_quality: str = "unknown"
     decision_scores: DecisionScores = DecisionScores()
     mvp_plan: MVPPlanSummary = MVPPlanSummary()
     build_status: BuildStatus = BuildStatus()

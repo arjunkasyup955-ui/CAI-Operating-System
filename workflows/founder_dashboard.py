@@ -1,3 +1,4 @@
+import threading
 from collections.abc import Callable
 from typing import Any
 
@@ -15,6 +16,7 @@ from agents.founder.orchestrator.agent import run_founder_pipeline
 from agents.founder.research_pipeline.agent import run_research_pipeline
 from core.event_bus import AFOSEvent, get_event_bus
 from core.state import VentureState
+from workflows.decision_engine import reset_research_pipeline_invoker, set_research_pipeline_invoker
 
 # --------------------------------------------------------------------------- #
 # Dependency injection: the 7 prior Phase 4 components are the *only* things
@@ -127,6 +129,7 @@ class FounderDashboardState(VentureState, total=False):
     error: str
     founder_orchestrator_result: dict[str, Any]
     research_result: dict[str, Any]
+    research_data_quality: str
     decision_result: dict[str, Any]
     mvp_result: dict[str, Any]
     build_result: dict[str, Any]
@@ -134,6 +137,57 @@ class FounderDashboardState(VentureState, total=False):
     growth_result: dict[str, Any]
     git_result: dict[str, Any]
     dashboard: dict[str, Any]
+
+
+# --------------------------------------------------------------------------- #
+# Research re-invocation caching: decision/mvp/build/deployment/growth each
+# independently re-derive research from scratch via a chain of single-
+# upstream-dependency calls that all bottom out at decision_engine.py's own
+# research_node -> get_research_pipeline_invoker() (traced call graph: 7
+# independent full research passes per idea in the no-retry case). Every one
+# of those 5 stages transitively funnels through that ONE seam, so installing
+# a single override there - the same public DI seam decision_engine.py's own
+# test suite already uses for fakes, just fed a real cached result instead -
+# collapses all 5 redundant re-derivations into reuse of the one real result
+# this module's own "research" node already computed, without touching any
+# of the 5 components' own files or public contracts (they still receive an
+# identically-shaped FounderResearchReport dict; only its origin changes).
+# founder_orchestrator_node's own research call is NOT this cache's source -
+# it invokes a different subsystem (the Phase 1 Research Supervisor subgraph
+# via founder_pipeline.py), not run_research_pipeline, so its output isn't
+# contract-compatible with what decision_engine.py's research_node expects.
+# --------------------------------------------------------------------------- #
+
+_research_cache_lock = threading.Lock()
+
+
+def _install_cached_research_invoker(research_result: dict[str, Any]) -> None:
+    with _research_cache_lock:
+        set_research_pipeline_invoker(lambda idea, venture_id, research_depth: research_result)
+
+
+def _reset_cached_research_invoker() -> None:
+    with _research_cache_lock:
+        reset_research_pipeline_invoker()
+
+
+def _classify_research_data_quality(research_result: dict[str, Any]) -> str:
+    """Bug #13 minimal fix: a visibility flag distinguishing genuine research
+    from silent fallback-to-neutral-defaults under provider failure/rate-
+    limit pressure. Classifies data already present in the research result
+    (the same stage_results ok/failed breakdown decision_engine.py's own
+    _extract_metrics() already derives stage_success_ratio from) - no new
+    subsystem, just labeling what's already there.
+    """
+    stage_results = research_result.get("stage_results") or []
+    if not stage_results:
+        return "full_fallback"
+    ok_count = sum(1 for s in stage_results if s.get("ok"))
+    if ok_count == len(stage_results):
+        return "genuine"
+    if ok_count == 0:
+        return "full_fallback"
+    return "partial_fallback"
 
 
 def _ok(entry: dict[str, Any]) -> bool:
@@ -196,7 +250,13 @@ def founder_orchestrator_node(state: FounderDashboardState) -> dict:
 
 def research_node(state: FounderDashboardState) -> dict:
     result = _call_component("research_pipeline", state.get("idea", ""), state.get("venture_id", ""), state.get("research_depth") or "standard")
-    return {"research_result": result}
+    # Cache this one real result behind decision_engine.py's own DI seam so
+    # decision/mvp/build/deployment/growth (all 5 transitively re-derive
+    # research through that same seam) reuse it instead of each
+    # independently re-computing it from scratch. Reset in aggregate_node,
+    # which every graph path unconditionally reaches once this node has run.
+    _install_cached_research_invoker(result)
+    return {"research_result": result, "research_data_quality": _classify_research_data_quality(result)}
 
 
 def decision_node(state: FounderDashboardState) -> dict:
@@ -284,6 +344,12 @@ def _summarize_alerts_risks_actions(
 
 
 def aggregate_node(state: FounderDashboardState) -> dict:
+    # Always reset, whether research_node installed the override or not (a
+    # rejected-input run never reaches this point having installed anything,
+    # making this a harmless no-op in that case) - ensures no cached research
+    # leaks into a later, unrelated dashboard run in this same process.
+    _reset_cached_research_invoker()
+
     bus = get_event_bus()
     venture_id = state.get("venture_id", "")
     idea = state.get("idea", "")
@@ -295,7 +361,8 @@ def aggregate_node(state: FounderDashboardState) -> dict:
             "idea": idea, "venture_id": venture_id, "overall_health": "unknown", "status": "rejected",
             "venture_summary": {}, "research_summary": {}, "market_analysis": {}, "competitor_summary": {},
             "decision_scores": {}, "mvp_plan": {}, "build_status": {}, "deployment_status": {}, "growth_status": {},
-            "git_status": {}, "alerts": [reason], "risks": [], "recommended_next_actions": [], "summary": reason, "error": reason,
+            "git_status": {}, "research_data_quality": "unknown",
+            "alerts": [reason], "risks": [], "recommended_next_actions": [], "summary": reason, "error": reason,
         }
         bus.publish(AFOSEvent(type="dashboard_failed", source_agent="founder_dashboard", venture_id=venture_id, payload={"reason": reason, "status": "rejected"}))
         return {"dashboard": dashboard, "history": [{"agent": "founder_dashboard", "event": "dashboard_failed", "status": "rejected"}]}
@@ -344,6 +411,7 @@ def aggregate_node(state: FounderDashboardState) -> dict:
         },
         "market_analysis": research.get("market_analysis", {}),
         "competitor_summary": research.get("competitor_analysis", {}),
+        "research_data_quality": state.get("research_data_quality", "unknown"),
         "decision_scores": {
             "opportunity_score": decision.get("opportunity_score", 0.0),
             "competition_score": decision.get("competition_score", 0.0),

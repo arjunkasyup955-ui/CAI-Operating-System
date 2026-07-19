@@ -127,6 +127,7 @@ def _build_report(idea: str, context: str, sources: list[str]) -> IdeaValidation
         capability="high-reasoning",
         agent_name="idea_validation_agent",
         timeout=300.0,
+        json_mode=True,
     )
     data = json.loads(_extract_json(response.content))
     data["sources_used"] = sources

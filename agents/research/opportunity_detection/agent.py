@@ -117,6 +117,7 @@ def _build_report(idea: str, context: str, sources: list[str]) -> OpportunityRep
         capability="high-reasoning",
         agent_name="opportunity_detection_agent",
         timeout=300.0,
+        json_mode=True,
     )
     data = json.loads(_extract_json(response.content))
     data["sources_used"] = sources

@@ -1,8 +1,14 @@
+import logging
+import threading
+import time
+from collections import deque
 from typing import Protocol, TypedDict
 
 from pydantic import BaseModel
 
 from core.config import get_settings
+
+logger = logging.getLogger("afos.model_router.providers")
 
 # Rough per-1K-token USD pricing, only used for budget estimates - not billing-accurate.
 _OPENAI_PRICING_PER_1K = {
@@ -127,19 +133,109 @@ class NvidiaProvider:
 
     name = "nvidia"
 
+    # Process-wide counter (not per-instance) so its number reflects the true
+    # total call volume across every agent/component that shares this one
+    # ModelRouter/NvidiaProvider within a single run - the thing actually in
+    # question (is AFOS's own redundant multi-invocation research pattern
+    # what's exceeding NIM's 40 req/min budget, or is it leftover load from a
+    # prior run). Resets naturally each fresh process invocation.
+    _total_calls = 0
+
+    # Proactive client-side rate limiting: a sliding window of call
+    # timestamps, capped below NIM's free-tier 40 req/min ceiling. This is
+    # deliberately separate from the reactive 429-backoff loop in chat()
+    # below - that one recovers AFTER hitting the limit; this one sleeps
+    # BEFORE a call would exceed it, so the limit is rarely if ever hit in
+    # the first place. Process-wide (class-level) and lock-guarded, same
+    # scope/rationale as _total_calls above.
+    _MAX_CALLS_PER_MINUTE = 35  # buffer below NIM's 40 req/min free-tier limit
+    _call_timestamps: deque = deque()
+    _rate_limit_lock = threading.Lock()
+
+    @classmethod
+    def _throttle(cls) -> None:
+        with cls._rate_limit_lock:
+            now = time.monotonic()
+            window = cls._call_timestamps
+            while window and now - window[0] >= 60.0:
+                window.popleft()
+            if len(window) >= cls._MAX_CALLS_PER_MINUTE:
+                sleep_for = 60.0 - (now - window[0]) + 0.05
+                if sleep_for > 0:
+                    logger.info(
+                        "nvidia proactive throttle: %d calls in the last 60s (limit %d) - sleeping %.1fs before next call",
+                        len(window), cls._MAX_CALLS_PER_MINUTE, sleep_for,
+                    )
+                    time.sleep(sleep_for)
+                now = time.monotonic()
+                while window and now - window[0] >= 60.0:
+                    window.popleft()
+            window.append(time.monotonic())
+
     def chat(self, messages: list[ChatMessage], model: str, **kwargs: object) -> ModelResponse:
+        import random
+
         import httpx
 
         api_key = get_settings().nvidia_api_key
         if not api_key:
             raise RuntimeError("NVIDIA_API_KEY is not configured")
 
-        response = httpx.post(
-            "https://integrate.api.nvidia.com/v1/chat/completions",
-            headers={"Authorization": f"Bearer {api_key}"},
-            json={"model": model, "messages": messages, "max_tokens": kwargs.get("max_tokens", 1024)},
-            timeout=kwargs.get("timeout", 60.0),
-        )
+        body: dict[str, object] = {"model": model, "messages": messages, "max_tokens": kwargs.get("max_tokens", 1024)}
+        if kwargs.get("json_mode"):
+            # Verified empirically against the hosted NIM endpoint: this makes
+            # Nemotron return pure JSON with no markdown fences and no
+            # surrounding reasoning text, eliminating the failure mode at its
+            # source rather than parsing around it after the fact. Only added
+            # when the caller opts in (agents that already prompt for JSON) -
+            # other providers in the same fallback chain silently ignore this
+            # kwarg, so it's safe to pass through ModelRouter unconditionally.
+            body["response_format"] = {"type": "json_object"}
+
+        max_attempts = 4  # 1 initial attempt + up to 3 retries, per spec
+        base_delay_seconds = 2.0  # -> 2s, 4s, 8s across the 3 retries
+        response: httpx.Response | None = None
+        for attempt in range(1, max_attempts + 1):
+            NvidiaProvider._throttle()
+            NvidiaProvider._total_calls += 1
+            call_number = NvidiaProvider._total_calls
+            logger.info("nvidia call #%d starting (attempt %d/%d, model=%s)", call_number, attempt, max_attempts, model)
+            response = httpx.post(
+                "https://integrate.api.nvidia.com/v1/chat/completions",
+                headers={"Authorization": f"Bearer {api_key}"},
+                json=body,
+                timeout=kwargs.get("timeout", 60.0),
+            )
+            if response.status_code >= 400:
+                # Diagnostic only - captures NIM's actual error body (not just
+                # the generic httpx status line raise_for_status() would give)
+                # for ANY non-2xx response, not just 429, so the next
+                # occurrence of an unexplained error (e.g. the 400s seen in
+                # testing) is self-documenting instead of needing a live
+                # reproduction attempt after the fact.
+                logger.warning(
+                    "nvidia call #%d got HTTP %d (attempt %d/%d) - response body: %s",
+                    call_number, response.status_code, attempt, max_attempts, response.text[:500],
+                )
+            if response.status_code != 429 or attempt == max_attempts:
+                break
+
+            retry_after_header = response.headers.get("Retry-After") or response.headers.get("retry-after")
+            if retry_after_header:
+                try:
+                    delay = float(retry_after_header)
+                except ValueError:
+                    delay = base_delay_seconds * (2 ** (attempt - 1))
+            else:
+                delay = base_delay_seconds * (2 ** (attempt - 1))
+            delay += random.uniform(0, delay * 0.5)  # jitter, up to +50%, to avoid synchronized retry storms
+            logger.warning(
+                "nvidia call #%d hit 429 (attempt %d/%d) - backing off %.1fs before retrying (%s)",
+                call_number, attempt, max_attempts, delay, "Retry-After header" if retry_after_header else "exponential backoff",
+            )
+            time.sleep(delay)
+
+        assert response is not None
         response.raise_for_status()
         data = response.json()
         content = data["choices"][0]["message"]["content"] or ""

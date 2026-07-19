@@ -82,6 +82,7 @@ def _build_report(idea: str, content: str, sources: list[str]) -> MarketIntellig
         capability="high-reasoning",
         agent_name="market_intelligence_agent",
         timeout=300.0,
+        json_mode=True,
     )
     data = json.loads(_extract_json(response.content))
     data["sources_used"] = sources
