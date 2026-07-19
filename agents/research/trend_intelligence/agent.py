@@ -5,7 +5,7 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 
 from core.event_bus import AFOSEvent, get_event_bus
 from core.registries import get_agent_registry
@@ -29,6 +29,17 @@ class TrendIntelligenceReport(BaseModel):
     trend_summary: str = ""
     sources_used: list[str] = []
     confidence_score: float = 0.0
+
+    @field_validator("trend_summary", mode="before")
+    @classmethod
+    def _join_list_answers(cls, value: object) -> object:
+        """Bug #12: see agents/research/competitor_intelligence/agent.py's
+        identical validator - Nemotron occasionally answers a prose field with
+        a list of sentences instead of one string despite json_mode.
+        """
+        if isinstance(value, list):
+            return " ".join(str(item) for item in value)
+        return value
 
 
 AnalyzerFn = Callable[[str, str, list[str]], TrendIntelligenceReport]

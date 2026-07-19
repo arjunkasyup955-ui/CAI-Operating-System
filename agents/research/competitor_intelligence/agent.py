@@ -5,7 +5,7 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 
 from core.event_bus import AFOSEvent, get_event_bus
 from core.registries import get_agent_registry
@@ -29,6 +29,19 @@ class CompetitorIntelligenceReport(BaseModel):
     differentiation_opportunities: list[str] = []
     sources_used: list[str] = []
     confidence_score: float = 0.0
+
+    @field_validator("pricing_summary", "positioning", mode="before")
+    @classmethod
+    def _join_list_answers(cls, value: object) -> object:
+        """Bug #12: Nemotron occasionally answers a prose field with a list of
+        sentences instead of one string (e.g. positioning as
+        ['VoltDispatch24 markets ... for same-day repairs.']) despite json_mode
+        and an explicit "(string)" instruction. Join rather than reject - the
+        content is still usable, just shaped wrong.
+        """
+        if isinstance(value, list):
+            return " ".join(str(item) for item in value)
+        return value
 
 
 AnalyzerFn = Callable[[str, str, list[str]], CompetitorIntelligenceReport]
