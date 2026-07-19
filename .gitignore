@@ -21,6 +21,15 @@ venv/
 *.db-shm
 *.db-wal
 
+# Chroma persistent store (chroma.sqlite3 + per-collection UUID dirs of
+# HNSW index .bin files - regenerated locally, same treatment as *.db above)
+database/chroma/
+
+# Process artifacts from detached background runs (Start-Process -PassThru
+# PID capture, scripts/*.pid) - never meant to be committed, only swept in by
+# AI Builder's own git-add-all commit step (see docs/bug_investigation_log.md)
+*.pid
+
 # VS Code
 .vscode/
 
