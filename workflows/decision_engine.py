@@ -205,7 +205,7 @@ def _calculate_scores(metrics: dict[str, Any]) -> dict[str, float]:
 
     v_competition = metrics.get("validation_competition_score")
     if validated and v_competition is not None:
-        competition_score = _clamp(float(v_competition))
+        competition_score = _clamp(float(v_competition) * 10.0)
     else:
         competition_score = _clamp(8.0 - metrics["direct_competitors_count"] * 1.2 + metrics["market_gaps_count"] * 0.5)
 
@@ -217,8 +217,8 @@ def _calculate_scores(metrics: dict[str, Any]) -> dict[str, float]:
     base_difficulty = _DIFFICULTY_FAVORABILITY.get(metrics["opportunity_difficulty"], 5.0)
     v_execution = metrics.get("validation_execution_score")
     if validated and v_execution is not None:
-        build_difficulty = _clamp((base_difficulty + float(v_execution)) / 2)
-        execution_complexity = _clamp(float(v_execution))
+        build_difficulty = _clamp((base_difficulty + float(v_execution) * 10.0) / 2)
+        execution_complexity = _clamp(float(v_execution) * 10.0)
     else:
         build_difficulty = _clamp(base_difficulty)
         execution_complexity = _clamp(base_difficulty - metrics["validation_risks_count"] * 0.3)
@@ -234,7 +234,7 @@ def _calculate_scores(metrics: dict[str, Any]) -> dict[str, float]:
         market_timing = _clamp(5.0 + (metrics["emerging_trends_count"] - metrics["declining_trends_count"]) * 0.8)
     v_timing = metrics.get("validation_timing_score")
     if validated and v_timing is not None:
-        market_timing = _clamp((market_timing + float(v_timing)) / 2)
+        market_timing = _clamp((market_timing + float(v_timing) * 10.0) / 2)
 
     keyword_hits = sum(1 for kw in _AI_KEYWORDS if kw in f" {metrics['idea_text'].lower()} ")
     ai_advantage = _clamp(5.0 + keyword_hits * 1.2)
