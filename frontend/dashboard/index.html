@@ -28,6 +28,7 @@
 
 <div class="app-layout">
   <nav class="sidebar">
+    <a href="#submit" class="nav-link" data-section="submit">✎ Submit Idea</a>
     <a href="#overview" class="nav-link active" data-section="overview">▣ Overview</a>
     <a href="#metrics" class="nav-link" data-section="metrics">▤ Metrics</a>
     <a href="#charts" class="nav-link" data-section="charts">▥ Charts</a>
@@ -39,6 +40,39 @@
   </nav>
 
   <main class="content">
+
+    <section id="submit" class="panel">
+      <div class="card" data-card="submit">
+        <div class="card-header">
+          <h2>Submit Idea</h2>
+          <button class="collapse-toggle" aria-label="Collapse">▾</button>
+        </div>
+        <div class="card-body">
+          <div class="submit-form">
+            <label for="submit-idea-input" class="visually-hidden">Idea</label>
+            <textarea id="submit-idea-input" rows="3" placeholder="Describe the startup idea to run through the founder pipeline..."></textarea>
+            <div class="submit-row">
+              <label for="submit-venture-id" class="visually-hidden">Venture ID (optional)</label>
+              <input id="submit-venture-id" type="text" placeholder="venture_id (optional, auto-generated if blank)">
+              <label for="submit-research-depth" class="visually-hidden">Research depth</label>
+              <select id="submit-research-depth">
+                <option value="standard">Standard research</option>
+                <option value="deep">Deep research</option>
+              </select>
+              <button id="submit-idea-btn" class="export-btn">Submit Idea</button>
+            </div>
+          </div>
+          <div id="submit-status-wrap" class="submit-status hidden">
+            <div class="submit-status-row">
+              <span id="submit-status-badge" class="badge queued">queued</span>
+              <span id="submit-status-stage">waiting to start</span>
+            </div>
+            <div class="progress-bar"><div id="submit-status-progress" class="progress-bar-fill" style="width:0%"></div></div>
+            <div id="submit-status-detail" class="submit-status-detail"></div>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <section id="overview" class="panel">
       <div class="card" data-card="overview">

@@ -39,6 +39,19 @@
       });
   }
 
+  function postJSON(path, payload) {
+    return fetch(path, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload || {}),
+    }).then(function (res) {
+      return res.json().then(function (data) {
+        if (!res.ok) throw new Error(data.error || ("HTTP " + res.status));
+        return data;
+      });
+    });
+  }
+
   function el(html) {
     var wrap = document.createElement("div");
     wrap.innerHTML = html.trim();
@@ -322,6 +335,114 @@
   }
 
   // ---------------------------------------------------------------- //
+  // Submit idea + live status polling
+  //
+  // Server-side, submissions run one at a time (a single background worker
+  // drains a queue - see backend/dashboard/jobs.py) - not just to be polite
+  // to the NIM rate limit, but because the pipeline caches research results
+  // in a shared global that isn't safe to read from two concurrent runs.
+  // So a second submission while one is in flight is expected to sit as
+  // "queued" here, not an error.
+  // ---------------------------------------------------------------- //
+  var submitState = { jobId: null, pollTimer: null };
+
+  function stageToPercent(stage, status) {
+    if (status === "done") return 100;
+    if (status === "error") return 100;
+    var m = /\((\d+)\/(\d+)\)/.exec(stage || "");
+    if (m) return Math.round((parseInt(m[1], 10) / parseInt(m[2], 10)) * 100);
+    if (stage === "finishing up") return 95;
+    if (stage === "starting") return 5;
+    return 0;
+  }
+
+  function renderJobStatus(job) {
+    var wrap = document.getElementById("submit-status-wrap");
+    var badge = document.getElementById("submit-status-badge");
+    var stageEl = document.getElementById("submit-status-stage");
+    var progress = document.getElementById("submit-status-progress");
+    var detail = document.getElementById("submit-status-detail");
+
+    wrap.classList.remove("hidden");
+    badge.className = "badge " + escapeHtml(job.status);
+    badge.textContent = job.status;
+    stageEl.textContent = job.current_stage || "";
+
+    progress.className = "progress-bar-fill" +
+      (job.status === "done" ? " healthy" : job.status === "error" ? " critical" : "");
+    progress.style.width = stageToPercent(job.current_stage, job.status) + "%";
+
+    if (job.status === "queued" && job.queue_position > 0) {
+      detail.textContent = job.queue_position + " idea(s) ahead of this one - it will start automatically.";
+    } else if (job.status === "error") {
+      detail.textContent = job.error || "The pipeline reported a failure.";
+    } else if (job.status === "done") {
+      var scores = (job.result && job.result.decision_scores) || {};
+      detail.textContent = "Overall score: " + (scores.overall_score !== undefined ? scores.overall_score : "n/a") +
+        " - see it in Execution History (venture_id: " + job.venture_id + ").";
+    } else {
+      detail.textContent = "venture_id: " + job.venture_id;
+    }
+  }
+
+  function stopPolling() {
+    if (submitState.pollTimer) {
+      clearInterval(submitState.pollTimer);
+      submitState.pollTimer = null;
+    }
+  }
+
+  function refreshJobStatus() {
+    if (!submitState.jobId) return;
+    fetchJSON(API_BASE + "/submissions/" + submitState.jobId).then(function (job) {
+      renderJobStatus(job);
+      if (job.status === "done" || job.status === "error") {
+        stopPolling();
+        document.getElementById("submit-idea-btn").disabled = false;
+        notify(job.status === "done" ? "Idea finished processing" : "Idea processing failed", job.status === "done" ? "success" : "error");
+        loadHistory(); loadEvents();
+      }
+    }).catch(function (err) {
+      stopPolling();
+      document.getElementById("submit-idea-btn").disabled = false;
+      notify("Lost track of submission: " + err.message, "error");
+    });
+  }
+
+  function pollJob(jobId) {
+    stopPolling();
+    submitState.jobId = jobId;
+    refreshJobStatus();
+    submitState.pollTimer = setInterval(refreshJobStatus, 3000);
+  }
+
+  function submitIdea() {
+    var idea = document.getElementById("submit-idea-input").value.trim();
+    if (!idea) {
+      notify("Enter an idea before submitting", "warning");
+      return;
+    }
+    var ventureId = document.getElementById("submit-venture-id").value.trim();
+    var researchDepth = document.getElementById("submit-research-depth").value;
+    var btn = document.getElementById("submit-idea-btn");
+    btn.disabled = true;
+
+    postJSON(API_BASE + "/submissions", {
+      idea: idea, venture_id: ventureId || undefined, research_depth: researchDepth,
+    }).then(function (data) {
+      notify("Idea submitted - tracking job " + data.job_id, "success");
+      pollJob(data.job_id);
+    }).catch(function (err) {
+      btn.disabled = false;
+      notify("Failed to submit idea: " + err.message, "error");
+    });
+  }
+
+  function setupSubmitForm() {
+    document.getElementById("submit-idea-btn").addEventListener("click", submitIdea);
+  }
+
+  // ---------------------------------------------------------------- //
   // Global search / filters
   // ---------------------------------------------------------------- //
   function setupFilters() {
@@ -388,6 +509,7 @@
     setupSidebarNav();
     setupFilters();
     setupExportButtons();
+    setupSubmitForm();
     loadProjects().finally(loadAll);
   }
 

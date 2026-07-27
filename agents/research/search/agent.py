@@ -1,4 +1,5 @@
 import logging
+import re
 from pathlib import Path
 
 import tools.web.search  # noqa: F401  (import registers the web_search tool)
@@ -8,6 +9,29 @@ from core.state import VentureState
 logger = logging.getLogger("afos.agents.search")
 
 get_agent_registry().register_from_yaml(Path(__file__).parent / "manifest.yaml")
+
+# Tavily hard-rejects queries over 400 chars with a 400 Bad Request; a long,
+# multi-paragraph idea description used as a literal query used to fail every
+# query-based provider and silently cascade to neutral-default scores
+# downstream (the Bug #10 fingerprint, retriggered via a new path). Margin
+# kept below the actual 400-char cap. Only the search query is shortened -
+# state["idea"] is untouched, so every other research stage still analyzes
+# the full idea text.
+_MAX_QUERY_CHARS = 350
+
+
+def _build_search_query(idea: str) -> str:
+    idea = idea.strip()
+    if len(idea) <= _MAX_QUERY_CHARS:
+        return idea
+
+    first_sentence = re.split(r"(?<=[.!?])\s", idea, maxsplit=1)[0]
+    if first_sentence and len(first_sentence) <= _MAX_QUERY_CHARS:
+        return first_sentence
+
+    truncated = idea[:_MAX_QUERY_CHARS]
+    last_space = truncated.rfind(" ")
+    return truncated[:last_space] if last_space > 0 else truncated
 
 
 def search_node(state: VentureState) -> dict:
@@ -21,7 +45,7 @@ def search_node(state: VentureState) -> dict:
     Research Supervisor subgraph.
     """
     idea = state.get("idea", "")
-    query = idea
+    query = _build_search_query(idea)
 
     try:
         results = get_tool_registry().invoke("web_search", agent_name="search_agent", query=query, max_results=5)

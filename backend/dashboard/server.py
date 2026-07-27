@@ -21,6 +21,21 @@ class _DashboardRequestHandler(BaseHTTPRequestHandler):
         except Exception as exc:  # a handler bug must not crash the server thread
             logger.error("dashboard http: unhandled error for %s: %s", parsed.path, exc)
             status, content_type, body = 500, "application/json; charset=utf-8", b'{"error": "internal server error"}'
+        self._respond(status, content_type, body)
+
+    def do_POST(self) -> None:  # noqa: N802 - stdlib method name
+        parsed = urlsplit(self.path)
+        query = parse_qs(parsed.query)
+        content_length = int(self.headers.get("Content-Length") or 0)
+        request_body = self.rfile.read(content_length) if content_length > 0 else b""
+        try:
+            status, content_type, body = handle_request("POST", parsed.path, query, request_body)
+        except Exception as exc:  # a handler bug must not crash the server thread
+            logger.error("dashboard http: unhandled error for %s: %s", parsed.path, exc)
+            status, content_type, body = 500, "application/json; charset=utf-8", b'{"error": "internal server error"}'
+        self._respond(status, content_type, body)
+
+    def _respond(self, status: int, content_type: str, body: bytes) -> None:
         self.send_response(status)
         self.send_header("Content-Type", content_type)
         self.send_header("Content-Length", str(len(body)))

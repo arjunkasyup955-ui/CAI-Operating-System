@@ -214,9 +214,36 @@ table.data-table th { color: var(--text-dim); font-weight: 500; }
   font-size: 11px;
   border: 1px solid var(--border);
 }
-.badge.completed, .badge.healthy { color: var(--healthy); border-color: var(--healthy); }
+.badge.completed, .badge.healthy, .badge.done { color: var(--healthy); border-color: var(--healthy); }
 .badge.failed, .badge.critical, .badge.error { color: var(--critical); border-color: var(--critical); }
 .badge.running, .badge.queued, .badge.degraded { color: var(--degraded); border-color: var(--degraded); }
+
+/* Submit idea */
+.submit-form { display: flex; flex-direction: column; gap: 10px; }
+.submit-form textarea {
+  background: var(--bg-card);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px;
+  font-family: inherit;
+  font-size: 13px;
+  resize: vertical;
+}
+.submit-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.submit-row input, .submit-row select {
+  background: var(--bg-card);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 10px;
+}
+.submit-row input { flex: 1; min-width: 200px; }
+.submit-row button:disabled { opacity: 0.5; cursor: not-allowed; }
+.submit-status { margin-top: 16px; }
+.submit-status.hidden { display: none; }
+.submit-status-row { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+.submit-status-detail { margin-top: 6px; color: var(--text-dim); font-size: 12px; }
 
 /* Filters + pagination */
 .filter-row {

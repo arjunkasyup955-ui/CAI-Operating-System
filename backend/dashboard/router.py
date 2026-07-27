@@ -4,6 +4,7 @@ from typing import Any
 
 from backend.dashboard.charts import build_chart_data
 from backend.dashboard.export import export
+from backend.dashboard.jobs import get_job, submit_job
 from core.metrics import collect_metrics, compute_health
 from core.metrics.collector import get_observed_scheduler
 from core.observability import get_default_execution_history, get_default_log_store, get_pipeline_events
@@ -63,6 +64,30 @@ def _serve_static(rel_name: str, content_type: str) -> tuple[int, str, bytes]:
     return 200, content_type, path.read_bytes()
 
 
+def _handle_submit(body: bytes) -> tuple[int, str, bytes]:
+    try:
+        payload = json.loads(body.decode("utf-8")) if body else {}
+    except (UnicodeDecodeError, json.JSONDecodeError):
+        return _error(400, "request body must be valid JSON")
+    if not isinstance(payload, dict):
+        return _error(400, "request body must be a JSON object")
+
+    idea = payload.get("idea")
+    if not isinstance(idea, str) or not idea.strip():
+        return _error(400, "'idea' is required and must be a non-empty string")
+
+    venture_id = payload.get("venture_id")
+    if venture_id is not None and not isinstance(venture_id, str):
+        return _error(400, "'venture_id' must be a string if provided")
+
+    research_depth = payload.get("research_depth")
+    if research_depth is not None and not isinstance(research_depth, str):
+        return _error(400, "'research_depth' must be a string if provided")
+
+    job_id = submit_job(idea, venture_id, research_depth or "standard")
+    return _json({"job_id": job_id, "status": "queued"}, status=202)
+
+
 def _current_metrics_and_health(venture_id: str | None) -> tuple[dict[str, Any], dict[str, Any]]:
     metrics = collect_metrics(venture_id=venture_id)
     health = compute_health(metrics)
@@ -71,14 +96,22 @@ def _current_metrics_and_health(venture_id: str | None) -> tuple[dict[str, Any],
 
 def handle_request(method: str, path: str, query: dict[str, list[str]] | None = None, body: bytes = b"") -> tuple[int, str, bytes]:
     """Pure request router: (method, path, query, body) -> (status, content_type,
-    body_bytes). REST-only (GET reads, no server-side mutation of AFOS state -
-    the dashboard is a read/export surface over data other components already
-    produce). Deliberately decoupled from any actual socket/HTTP server
-    machinery, so both the real stdlib server (backend/dashboard/server.py)
-    and a smoke test can call this directly.
+    body_bytes). Mostly a read/export surface over data other components
+    already produce (GET-only, 405 otherwise), with one deliberate exception:
+    POST /api/dashboard/submissions starts a founder_dashboard pipeline run
+    in a background job (backend/dashboard/jobs.py) and returns a job_id -
+    the only server-side mutation this router performs. Deliberately
+    decoupled from any actual socket/HTTP server machinery, so both the real
+    stdlib server (backend/dashboard/server.py) and a smoke test can call
+    this directly.
     """
     query = query or {}
     method = method.upper()
+
+    if method == "POST":
+        if path == "/api/dashboard/submissions":
+            return _handle_submit(body)
+        return _error(405, f"method not allowed: {method}")
 
     if method != "GET":
         return _error(405, f"method not allowed: {method}")
@@ -121,6 +154,13 @@ def handle_request(method: str, path: str, query: dict[str, list[str]] | None = 
         if entry is None:
             return _error(404, f"execution not found: {execution_id}")
         return _json(entry)
+
+    if path.startswith("/api/dashboard/submissions/"):
+        job_id = path[len("/api/dashboard/submissions/"):]
+        job = get_job(job_id)
+        if job is None:
+            return _error(404, f"job not found: {job_id}")
+        return _json(job)
 
     if path == "/api/dashboard/compare":
         id_a, id_b = _q1(query, "a"), _q1(query, "b")
