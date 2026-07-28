@@ -41,3 +41,9 @@ Thumbs.db
 # treatment as *.db above; nothing in the codebase depends on these being
 # tracked, confirmed via grep across scripts/smoke_test_phase*.py)
 outputs/
+
+# AI-Builder-generated per-venture scaffolds (Fix A, workflows/mvp_planner.py's
+# _build_folder_structure()) - real output, but per-run/per-idea, not meant to
+# be permanently tracked in the AFOS platform's own repo, same treatment as
+# outputs/ above
+generated_ventures/
