@@ -10,7 +10,13 @@ _PROTECTED_DIR_NAMES = {".git", ".venv", "venv", "__pycache__", "node_modules"}
 _PROTECTED_FILE_NAMES = {".env"}
 # The frozen Phase 0 kernel - the File Editor must never be able to touch it, not even
 # via approval (this is a hard code-level ban, like Git's destructive-op refusal).
-_PROTECTED_TOP_LEVEL_DIRS = {"core"}
+# backend/frontend/docs/database/docker are the AFOS platform's own real source trees -
+# added as defense-in-depth after AI Builder's generic scaffold template collided with
+# them (see Fix A, docs/bug_investigation_log.md); AI-Builder-generated code now lives
+# under generated_ventures/{venture_id}/ instead, so none of these should ever be a
+# legitimate target for create_file/write_file again, but this backstops that intent in
+# code rather than relying solely on the path-prefixing convention holding forever.
+_PROTECTED_TOP_LEVEL_DIRS = {"core", "backend", "frontend", "docs", "database", "docker"}
 
 
 class PathTraversalError(Exception):

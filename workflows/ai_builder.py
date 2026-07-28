@@ -71,7 +71,20 @@ _PLANNABLE_MVP_STATUSES = {"completed"}
 
 
 def _succeeded(entry: dict[str, Any]) -> bool:
-    return str(entry.get("event", "")).endswith("_completed")
+    """An entry's event always ends in '_completed' whenever the underlying
+    Phase 2 agent call didn't raise - even when the operation itself was a
+    semantic no-op (e.g. file_editor_agent's create_file returns event=
+    "file_edit_completed" with success=False if the path already exists,
+    same convention in git_agent/terminal_agent/build_runner_agent/
+    claude_code_agent). Every one of those agents also spreads the
+    underlying tool result - including its own "success" field - into the
+    returned entry, so prefer that real semantic outcome when present
+    instead of trusting the event name alone.
+    """
+    if not str(entry.get("event", "")).endswith("_completed"):
+        return False
+    success = entry.get("success")
+    return bool(success) if success is not None else True
 
 
 def _debug_retry_succeeded(entry: dict[str, Any]) -> bool:

@@ -95,7 +95,8 @@ def main() -> None:
     print("\n== 3. Plan Generation: BUILD NOW (full scope) ==")
     mvp_planner.set_decision_engine_invoker(lambda idea, vid, depth: _BUILD_NOW_DECISION)
     try:
-        build_now = mvp_agent.run_mvp_planner(idea="An AI copilot for solo founders", venture_id=new_venture_id("build-now"))
+        build_now_vid = new_venture_id("build-now")
+        build_now = mvp_agent.run_mvp_planner(idea="An AI copilot for solo founders", venture_id=build_now_vid)
         check("plan completed", build_now["status"] == "completed")
         check("PRD is populated", bool(build_now["prd"]["title"]) and len(build_now["prd"]["goals"]) > 0)
         check("mvp_scope has included items", len(build_now["mvp_scope"]["included"]) > 0)
@@ -111,6 +112,10 @@ def main() -> None:
         check("AI-signal plan includes an embeddings table", "embeddings" in db_tables)
         check("api_outline has endpoints for every included feature area", len(build_now["api_outline"]) >= 5)
         check("folder_structure is non-empty and includes backend/frontend", any("backend" in p for p in build_now["folder_structure"]) and any("frontend" in p for p in build_now["folder_structure"]))
+        check(
+            "folder_structure is scoped under generated_ventures/{venture_id}/ (Fix A: no more repo-root collisions)",
+            len(build_now["folder_structure"]) > 0 and all(p.startswith(f"generated_ventures/{build_now_vid}/") for p in build_now["folder_structure"]),
+        )
         check("development_timeline has 4 phases", len(build_now["development_timeline"]) == 4)
         check("milestones align 1:1 with timeline phases", len(build_now["milestones"]) == len(build_now["development_timeline"]))
         check("risks_and_dependencies is non-empty", len(build_now["risks_and_dependencies"]) > 0)

@@ -208,31 +208,40 @@ def _build_api_outline(feature_list: list[dict[str, Any]]) -> list[dict[str, str
     return endpoints
 
 
-def _build_folder_structure(ai_signal: bool, monetize: bool) -> list[str]:
+def _build_folder_structure(venture_id: str, ai_signal: bool, monetize: bool) -> list[str]:
+    """Every path is scoped under generated_ventures/{venture_id}/ rather than
+    the repo root - these generic names (backend/app/main.py, docs/PRD.md,
+    ...) collide with the AFOS platform's own real source tree at the repo
+    root otherwise, silently no-opping every create_file call (see
+    docs/bug_investigation_log.md's Fix A). venture_id is guaranteed
+    non-empty here - _validate_inputs() rejects a missing one before the
+    graph ever reaches plan_generation_node.
+    """
+    prefix = f"generated_ventures/{venture_id}/"
     structure = [
-        "backend/",
-        "backend/app/",
-        "backend/app/main.py",
-        "backend/app/api/",
-        "backend/app/api/auth.py",
-        "backend/app/api/core.py",
-        "backend/app/models/",
-        "backend/app/db/",
-        "backend/tests/",
-        "frontend/",
-        "frontend/src/",
-        "frontend/src/pages/",
-        "frontend/src/components/",
-        "database/",
-        "database/migrations/",
-        "docker/",
-        "docs/",
-        "docs/PRD.md",
+        prefix + "backend/",
+        prefix + "backend/app/",
+        prefix + "backend/app/main.py",
+        prefix + "backend/app/api/",
+        prefix + "backend/app/api/auth.py",
+        prefix + "backend/app/api/core.py",
+        prefix + "backend/app/models/",
+        prefix + "backend/app/db/",
+        prefix + "backend/tests/",
+        prefix + "frontend/",
+        prefix + "frontend/src/",
+        prefix + "frontend/src/pages/",
+        prefix + "frontend/src/components/",
+        prefix + "database/",
+        prefix + "database/migrations/",
+        prefix + "docker/",
+        prefix + "docs/",
+        prefix + "docs/PRD.md",
     ]
     if ai_signal:
-        structure.append("backend/app/ai/")
+        structure.append(prefix + "backend/app/ai/")
     if monetize:
-        structure.append("backend/app/api/billing.py")
+        structure.append(prefix + "backend/app/api/billing.py")
     return structure
 
 
@@ -283,7 +292,7 @@ def _build_risks_and_dependencies(decision: dict[str, Any], build_difficulty: fl
     return risks
 
 
-def _generate_plan(idea: str, decision: dict[str, Any]) -> dict[str, Any]:
+def _generate_plan(idea: str, decision: dict[str, Any], venture_id: str) -> dict[str, Any]:
     recommendation = decision.get("recommendation", "DROP")
     lean = recommendation == "VALIDATE FIRST"
     ai_signal = _has_ai_signal(idea, float(decision.get("ai_advantage", 0.0)))
@@ -303,7 +312,7 @@ def _generate_plan(idea: str, decision: dict[str, Any]) -> dict[str, Any]:
         "tech_stack": _build_tech_stack(ai_signal),
         "database_outline": _build_database_outline(ai_signal, monetize),
         "api_outline": _build_api_outline(feature_list),
-        "folder_structure": _build_folder_structure(ai_signal, monetize),
+        "folder_structure": _build_folder_structure(venture_id, ai_signal, monetize),
         "development_timeline": timeline,
         "milestones": _build_milestones(timeline),
         "risks_and_dependencies": _build_risks_and_dependencies(decision, build_difficulty, execution_complexity),
@@ -388,7 +397,7 @@ def _route_after_decision(state: MVPPlannerState) -> str:
 
 
 def plan_generation_node(state: MVPPlannerState) -> dict:
-    plan = _generate_plan(state.get("idea", ""), state.get("decision_report", {}))
+    plan = _generate_plan(state.get("idea", ""), state.get("decision_report", {}), state.get("venture_id", ""))
     return {"plan": plan, "status": "planned"}
 
 
